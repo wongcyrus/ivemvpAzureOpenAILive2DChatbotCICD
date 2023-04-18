@@ -2,13 +2,14 @@ const axios = require('axios');
 const { TableClient } = require("@azure/data-tables");
 const { getEmail, blockNonMember, isOverLimit } = require("./checkMember");
 
-const openaiurl = `https://eastus.api.cognitive.microsoft.com/openai/deployments/${process.env.openAiCognitiveDeploymentName}/completions?api-version=2022-12-01`;
+
 const openaipikey = process.env.openAiCognitiveAccount;
 const chatStorageAccountConnectionString = process.env.chatStorageAccountConnectionString;
 
 const chatHistoryTableClient = TableClient.fromConnectionString(chatStorageAccountConnectionString, "chatHistory");
 
 module.exports = async function (context, req) {
+    const model = req.query.model;
     const email = getEmail(req);
     await blockNonMember(email, context);
 
@@ -26,6 +27,17 @@ module.exports = async function (context, req) {
     const body = req.body;
     context.log(body);
 
+    if (!process.env.openAiCognitiveDeploymentNames.split(",").find(element => model == element)){
+        context.res.json({           
+            "choices": [
+                {
+                    "text": "Invalid model name!",
+                }
+            ]
+        });
+    }
+
+    const openaiurl = `https://eastus.api.cognitive.microsoft.com/openai/deployments/${model}/completions?api-version=2022-12-01`;
     try {
         const headers = {
             'Content-Type': 'application/json',

@@ -32,15 +32,16 @@
 <body>
 
   <div class="row">
-    <div class="leftColumn">.      
+    <div class="leftColumn">.
       <input type="hidden" id="config">
       <input type="hidden" id="conversations">
       <input type="hidden" id="query" value="">
       <input type="hidden" id="reply" value="">
       <a class="member" href="/.auth/logout">Logout </a>
-      <br/>
-      <label for="configFileInput" class="nonmember">Config File (<a href="config.json" target="_blank">Sample</a>):</label>
-      <input type="file" id="configFileInput" class="nonmember"><br class="nonmember"/>
+      <br />
+      <label for="configFileInput" class="nonmember">Config File (<a href="config.json"
+          target="_blank">Sample</a>):</label>
+      <input type="file" id="configFileInput" class="nonmember"><br class="nonmember" />
       <label for="language">Language</label>
       <select name="language" id="language">
         <option value='af-ZA'>Afrikaans (South Africa)</option>
@@ -183,6 +184,18 @@
         <option value='zh-HK' selected="selected">Chinese (Cantonese, Traditional)</option>
         <option value='zh-TW'>Chinese (Taiwanese Mandarin, Traditional)</option>
         <option value='zu-ZA'>Zulu (South Africa)</option>
+      </select>
+      <br>
+      <label for="model">Model</label>
+      <select name="model" id="model">
+        <option value='text-ada-001'>text-ada-001</option>
+        <option value='text-curie-001'>text-curie-001</option>
+        <option value='text-davinci-002'>text-davinci-002</option>
+        <option value='code-davinci-002'>code-davinci-002</option>
+        <option value='text-davinci-003'>text-davinci-003</option>
+        <option value='gpt-35-turbo' selected="selected">gpt-35-turbo</option>
+        <option value='gpt-4-32k'>gpt-4-32k</option>
+        <option value='gpt-4'>gpt-4</option>
       </select>
       <br>
       <section class="msger">
