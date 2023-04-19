@@ -82,7 +82,7 @@ module.exports = async function (context, req) {
         const now = new Date();
         const ticks = "" + now.getTime();
 
-        const cost = calculateCost(model, res.data.usage.completion_tokens, res.data.usage.prompt_tokens);
+        const cost = calculateCost(model, res.data.usage.completion_tokens || 0, res.data.usage.prompt_tokens);
         const chatEntity = {
             PartitionKey: email,
             RowKey: ticks,
