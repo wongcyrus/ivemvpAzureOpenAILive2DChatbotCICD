@@ -57,7 +57,7 @@ module.exports = async function (context, req) {
         context.log(res.data);
 
         const s = body.messages[body.messages.length - 1];
-        const quertion = s.content;
+        const question = s.content;
 
         const now = new Date();
         const ticks = "" + now.getTime();
@@ -66,8 +66,8 @@ module.exports = async function (context, req) {
             PartitionKey: email,
             RowKey: ticks,
             Email: email,
-            User: quertion,
-            Chatbot: res.data.choices[0].content,
+            User: question,
+            Chatbot: res.data.choices[0].message.content,
             Model: model,
             CompletionTokens: res.data.usage.completion_tokens,
             PromptTokens: res.data.usage.prompt_tokens,
