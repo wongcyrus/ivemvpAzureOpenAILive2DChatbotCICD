@@ -288,7 +288,7 @@ $(document).ready(async () => {
     return captureStream;
   }
 
-  const videoElem = document.querySelector('#shared-screen');
+  const videoElem = document.getElementById('shared-screen');
   let capturing = false;
   $('#share-screen').on('click', () => {
     if (capturing) {
@@ -304,5 +304,5 @@ $(document).ready(async () => {
         });
     }
   });
-  
+
 });
