@@ -81,8 +81,7 @@ module.exports = async function (context, req) {
         await chatHistoryTableClient.createEntity(chatEntity);
 
         let response = { ...res.data };
-        response['cost'] = cost;
-        response['tokenUsageCost'] = tokenUsageCost + cost;
+        response['cost'] = cost;        
         response['left'] = limit - (tokenUsageCost + cost);
         context.res.json(response);
 
