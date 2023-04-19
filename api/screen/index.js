@@ -8,7 +8,16 @@ const storageAccountConnectionString = process.env.chatStorageAccountConnectionS
 const blobServiceClient = BlobServiceClient.fromConnectionString(storageAccountConnectionString);
 const containerClient = blobServiceClient.getContainerClient("screen");
 
-
+function getDateTimeStringAsFilename() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth() + 1;
+    const day = now.getDate();
+    const hour = now.getHours();
+    const minute = now.getMinutes();
+    const second = now.getSeconds();
+    return `${year}-${month}-${day}-${hour}-${minute}-${second}`;
+}
 
 module.exports = async function (context, req) {
     const email = getEmail(req);
@@ -28,7 +37,7 @@ module.exports = async function (context, req) {
         const uploadBlobResponse = await blockBlobClient.uploadData(bodyBuffer);
         context.log(`Upload block blob ${blobName} successfully`, uploadBlobResponse.requestId);
 
-        const timeBlobName = email + "/" + Date.now().toUTCString() + "." + ext;
+        const timeBlobName = email + "/" + getDateTimeStringAsFilename() + "." + ext;
         const destinationBlobClient = await destinationContainerClient.getBlobClient(timeBlobName);
         await destinationBlobClient.beginCopyFromURL(blockBlobClient.url);
 
