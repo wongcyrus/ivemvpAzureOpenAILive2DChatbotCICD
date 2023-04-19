@@ -56,7 +56,7 @@ module.exports = async function (context, req) {
 
         } else {
             const apiVersion = "2022-12-01";
-            openaiurl = `hhttps://eastus.api.cognitive.microsoft.com/openai/deployments/${model}/completions?api-version=${apiVersion}`;
+            openaiurl = `https://eastus.api.cognitive.microsoft.com/openai/deployments/${model}/completions?api-version=${apiVersion}`;
             body['prompt'] = body['prompt'].map(c => c.content).join('/n/n');
         }
 
@@ -69,8 +69,13 @@ module.exports = async function (context, req) {
         });
         context.log(res.data);
 
+        let question;
+        if (!model.startsWith('gpt-')) {
+            res.data.choices[0]["message"] = { content: res.data.choices[0].message.content };
+        }
         const s = body.messages[body.messages.length - 1];
-        const question = s.content;
+        question = s.content;
+
 
         const now = new Date();
         const ticks = "" + now.getTime();
