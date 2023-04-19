@@ -310,7 +310,7 @@ $(document).ready(async () => {
   $('#share-screen').on('click', () => {
     if (capturing) {
       capturing = false;
-      clearTimeout(capturer);
+      clearInterval(capturer);
       stopCapture();
     } else {
       capturing = true;
@@ -321,10 +321,10 @@ $(document).ready(async () => {
         audio: false,
       }).then((stream) => {
         videoElem.srcObject = stream;
-        capturer = setTimeout(saveVideoToJpg, 3000);
+        capturer = setInterval(saveVideoToJpg, 5000);
         stream.getVideoTracks()[0].onended = function () {
           capturing = false;
-          clearTimeout(capturer);
+          clearInterval(capturer);
         };
       }).catch((err) => {
         console.log(err);
