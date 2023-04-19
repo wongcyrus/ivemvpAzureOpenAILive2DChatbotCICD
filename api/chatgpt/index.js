@@ -41,13 +41,11 @@ module.exports = async function (context, req) {
     }
 
     const apiVersion = model.startsWith('gpt-') ? "2023-03-15-preview" : "2022-12-01";
-                    // https://eastus.api.cognitive.microsoft.com/openai/deployments/gpt-35-turbo/chat/completions?api-version=2023-03-15-preview
-                    // https://eastus.api.cognitive.microsoft.com/openai/deployments/gpt-35-turbo/chat/completions?api-version=2023-03-15-preview
     const openaiurl = `https://eastus.api.cognitive.microsoft.com/openai/deployments/${model}/chat/completions?api-version=${apiVersion}`;
-
     body['messages'] = body['prompt'];
     delete body['prompt'];
-    
+    body['stop'] = null;
+
     try {
         const headers = {
             'Content-Type': 'application/json',
@@ -58,8 +56,8 @@ module.exports = async function (context, req) {
         });
         context.log(res.data);
 
-        const s = body.prompt.split(`<|im_end|>`);
-        const quertion = s[s.length - 2].replace("\n<|im_start|>User\n", "");
+        const s = body.messages[body.messages.length - 1];
+        const quertion = s.content;
 
         const now = new Date();
         const ticks = "" + now.getTime();
@@ -70,6 +68,7 @@ module.exports = async function (context, req) {
             Email: email,
             Student: quertion,
             Chatbot: res.data.choices[0].text,
+            Model: model,
             CompletionTokens: res.data.usage.completion_tokens,
             PromptTokens: res.data.usage.prompt_tokens,
             TotalTokens: res.data.usage.total_tokens,
