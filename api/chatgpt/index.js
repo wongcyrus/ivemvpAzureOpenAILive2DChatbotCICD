@@ -42,13 +42,24 @@ module.exports = async function (context, req) {
         });
     }
 
-    const apiVersion = model.startsWith('gpt-') ? "2023-03-15-preview" : "2022-12-01";
-    const openaiurl = `https://eastus.api.cognitive.microsoft.com/openai/deployments/${model}/chat/completions?api-version=${apiVersion}`;
-    body['messages'] = body['prompt'];
-    delete body['prompt'];
-    body['stop'] = null;
+
 
     try {
+
+        let openaiurl;
+        if (model.startsWith('gpt-')) {
+            const apiVersion = "2023-03-15-preview";
+            openaiurl = `https://eastus.api.cognitive.microsoft.com/openai/deployments/${model}/chat/completions?api-version=${apiVersion}`;
+            body['messages'] = body['prompt'];
+            delete body['prompt'];
+            body['stop'] = null;
+
+        } else {
+            const apiVersion = "2022-12-01";
+            openaiurl = `hhttps://eastus.api.cognitive.microsoft.com/openai/deployments/${model}/completions?api-version=${apiVersion}`;
+            body['prompt'] = body['prompt'].map(c => c.content).join('/n/n');
+        }
+
         const headers = {
             'Content-Type': 'application/json',
             'api-key': openaipikey,
@@ -81,7 +92,7 @@ module.exports = async function (context, req) {
         await chatHistoryTableClient.createEntity(chatEntity);
 
         let response = { ...res.data };
-        response['cost'] = cost;        
+        response['cost'] = cost;
         response['left'] = limit - (tokenUsageCost + cost);
         context.res.json(response);
 
