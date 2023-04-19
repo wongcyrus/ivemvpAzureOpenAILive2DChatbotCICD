@@ -1,6 +1,6 @@
 const axios = require('axios');
 const { TableClient } = require("@azure/data-tables");
-const { getEmail, blockNonMember, isOverLimit } = require("./checkMember");
+const { getEmail, blockNonMember, todayUsage, isOverLimit, getUsageLimit } = require("./checkMember");
 const { calculateCost } = require("./price");
 
 
@@ -14,7 +14,9 @@ module.exports = async function (context, req) {
     const email = getEmail(req);
     await blockNonMember(email, context);
 
-    if (await isOverLimit(email, context)) {
+    const limit = await getUsageLimit(email);
+    const tokenUsageCost = await todayUsage(email);
+    if (isOverLimit(email, tokenUsageCost, limit, context)) {
         context.res.json({
             "choices": [
                 {
@@ -62,6 +64,7 @@ module.exports = async function (context, req) {
         const now = new Date();
         const ticks = "" + now.getTime();
 
+        const cost = calculateCost(model, res.data.usage.completion_tokens, res.data.usage.prompt_tokens);
         const chatEntity = {
             PartitionKey: email,
             RowKey: ticks,
@@ -72,12 +75,17 @@ module.exports = async function (context, req) {
             CompletionTokens: res.data.usage.completion_tokens,
             PromptTokens: res.data.usage.prompt_tokens,
             TotalTokens: res.data.usage.total_tokens,
-            Cost: calculateCost(model, res.data.usage.completion_tokens, res.data.usage.prompt_tokens)
+            Cost: cost
         };
         context.log(chatEntity);
         await chatHistoryTableClient.createEntity(chatEntity);
 
-        context.res.json(res.data);
+        const response = res.data;
+        response['cost'] = cost;
+        tokenUsageCost += cost;
+        response['tokenUsageCost'] = tokenUsageCost;
+        response['left'] = limit - tokenUsageCost;
+        context.res.json(response);
 
     } catch (ex) {
         context.log(ex);

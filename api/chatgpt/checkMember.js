@@ -27,9 +27,18 @@ const blockNonMember = async (email, context) => {
     }
 }
 
-const isOverLimit = async (email, context) => {
+const isOverLimit = (email, tokenUsageCost, limit, context) => {    
+    context.log(email + " used " + tokenUsageCost + " tokens today.");
+    return tokenUsageCost > limit;
+};
+
+async function getUsageLimit(email) {
     const user = await usersTableClient.getEntity(email, email);
-    limit = user.Limit ?? 0.1;
+    const limit = user.Limit ?? 0.1;
+    return limit;
+}
+
+async function todayUsage(email) {
     let continuationToken = null;
     let pageEntities = undefined;
     let entities = [];
@@ -50,12 +59,14 @@ const isOverLimit = async (email, context) => {
         acc += cur.Cost;
         return acc;
     }, 0);
-    context.log(email + " used " + tokenUsageCost + " tokens today.");
-    return tokenUsageCost > limit;
-};
+    return tokenUsageCost;
+}
+
 
 module.exports = {
     getEmail,
     blockNonMember,
-    isOverLimit
+    isOverLimit,
+    todayUsage,
+    getUsageLimit
 };
