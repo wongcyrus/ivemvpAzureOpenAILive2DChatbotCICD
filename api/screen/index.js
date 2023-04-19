@@ -23,15 +23,19 @@ module.exports = async function (context, req) {
         // const tempName = temp.path({ suffix: '.jpg' });
         // fs.writeFileSync(tempName, bodyBuffer);
 
-        const blobName = email.replace(/[^a-zA-Z0-9 ]/g, '') + "." + ext;
+        const blobName = email.replace(/[^a-zA-Z0-9 ]/g, '_') + "." + ext;
         const blockBlobClient = containerClient.getBlockBlobClient(blobName);
         const uploadBlobResponse = await blockBlobClient.uploadData(bodyBuffer);
         context.log(`Upload block blob ${blobName} successfully`, uploadBlobResponse.requestId);
 
+        const timeBlobName = email + "/" + Date.now().toUTCString() + "." + ext;
+        const destinationBlobClient = await destinationContainerClient.getBlobClient(timeBlobName);
+        await destinationBlobClient.beginCopyFromURL(blockBlobClient.url);
+
 
         context.res = {
             headers: { 'Content-Type': 'application/json' },
-            body: { DisplayText: blobName }
+            body: { DisplayText: blobName, timeBlobName }
         };
         context.done();
 

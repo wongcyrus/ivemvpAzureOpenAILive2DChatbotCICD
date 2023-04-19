@@ -297,7 +297,7 @@ $(document).ready(async () => {
     console.log(img);
     $.post("/api/screen", img, (result) => {
       console.log(result);
-    }).error((err) => {
+    }).fail((err) => {
       console.log(err);
     });
     return img;
