@@ -30,15 +30,14 @@
 </head>
 
 <body>
-
+  <input type="hidden" id="config">
+  <input type="hidden" id="conversations">
+  <input type="hidden" id="query" value="">
+  <input type="hidden" id="reply" value="">
   <div class="row">
     <div class="leftColumn">.
-      <input type="hidden" id="config">
-      <input type="hidden" id="conversations">
-      <input type="hidden" id="query" value="">
-      <input type="hidden" id="reply" value="">
       <section class="msger">
-        <label for="logout"></label><a class="member" href="/.auth/logout">Logout </a></label>
+        <label for="logout"></label><a class="member" href="/.auth/logout">Logout</a></label>
         <br />
         <label for="configFileInput" class="nonmember">Config File (<a href="config.json"
             target="_blank">Sample</a>):</label>
