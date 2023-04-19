@@ -34,7 +34,7 @@ const isOverLimit = (email, tokenUsageCost, limit, context) => {
 
 async function getUsageLimit(email) {
     const user = await usersTableClient.getEntity(email, email);
-    const limit = user.Limit ?? 0.1;
+    const limit = user.Limit ?? 0.3;
     return limit;
 }
 
