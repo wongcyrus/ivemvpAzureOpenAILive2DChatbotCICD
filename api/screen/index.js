@@ -38,7 +38,7 @@ module.exports = async function (context, req) {
         context.log(`Upload block blob ${blobName} successfully`, uploadBlobResponse.requestId);
 
         const timeBlobName = email + "/" + getDateTimeStringAsFilename() + "." + ext;
-        const destinationBlobClient = await destinationContainerClient.getBlobClient(timeBlobName);
+        const destinationBlobClient = await containerClient.getBlobClient(timeBlobName);
         await destinationBlobClient.beginCopyFromURL(blockBlobClient.url);
 
 
