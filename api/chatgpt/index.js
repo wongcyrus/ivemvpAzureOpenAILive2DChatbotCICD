@@ -9,12 +9,12 @@ const chatStorageAccountConnectionString = process.env.chatStorageAccountConnect
 const chatHistoryTableClient = TableClient.fromConnectionString(chatStorageAccountConnectionString, "chatHistory");
 
 module.exports = async function (context, req) {
-    
+
     const email = getEmail(req);
     await blockNonMember(email, context);
 
     if (await isOverLimit(email)) {
-        context.res.json({           
+        context.res.json({
             "choices": [
                 {
                     "text": "Used up your daily limit. Please try again tomorrow.",
@@ -28,9 +28,9 @@ module.exports = async function (context, req) {
     context.log(body);
 
     const model = body.model;
-    delete body.model; 
-    if (!process.env.openAiCognitiveDeploymentNames.split(",").find(element => model == element)){
-        context.res.json({           
+    delete body.model;
+    if (!process.env.openAiCognitiveDeploymentNames.split(",").find(element => model == element)) {
+        context.res.json({
             "choices": [
                 {
                     "text": "Invalid model name!",
@@ -39,7 +39,9 @@ module.exports = async function (context, req) {
         });
     }
 
-    const openaiurl = `https://eastus.api.cognitive.microsoft.com/openai/deployments/${model}/completions?api-version=2022-12-01`;
+    const apiVersion = model.startsWith('gpt-4') ? "2023-03-15-preview" : "2022-12-01";
+
+    const openaiurl = `https://eastus.api.cognitive.microsoft.com/openai/deployments/${model}/completions?api-version=${apiVersion}`;
     try {
         const headers = {
             'Content-Type': 'application/json',
