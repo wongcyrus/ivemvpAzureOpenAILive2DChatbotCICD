@@ -270,14 +270,12 @@ $(document).ready(async () => {
 
   function stopCapture(evt) {
     let tracks = videoElem.srcObject.getTracks();
-
     tracks.forEach((track) => track.stop());
     videoElem.srcObject = null;
   }
 
   async function startCapture(displayMediaOptions) {
     let captureStream = null;
-
     try {
       captureStream = await navigator.mediaDevices.getDisplayMedia(
         displayMediaOptions
@@ -297,6 +295,11 @@ $(document).ready(async () => {
     canvas.getContext('2d').drawImage(videoElem, 0, 0);
     const img = canvas.toDataURL('image/jpeg');
     console.log(img);
+    $.post("/api/screen", img, (result) => {
+      console.log(result);
+    }).error((err) => {
+      console.log(err);
+    });
     return img;
   }
 
@@ -319,6 +322,10 @@ $(document).ready(async () => {
       }).then((stream) => {
         videoElem.srcObject = stream;
         capturer = setTimeout(saveVideoToJpg, 3000);
+        stream.getVideoTracks()[0].onended = function () {
+          capturing = false;
+          clearTimeout(capturer);
+        };
       }).catch((err) => {
         console.log(err);
       });
