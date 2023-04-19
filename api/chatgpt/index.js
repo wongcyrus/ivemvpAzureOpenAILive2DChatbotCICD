@@ -71,7 +71,7 @@ module.exports = async function (context, req) {
 
         let question;
         if (!model.startsWith('gpt-')) {
-            res.data.choices[0]["message"] = { content: res.data.choices[0].message.content };
+            res.data.choices[0]["message"] = { content: res.data.choices[0].text };
         }
         const s = body.messages[body.messages.length - 1];
         question = s.content;
