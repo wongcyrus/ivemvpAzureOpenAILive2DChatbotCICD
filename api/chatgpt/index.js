@@ -14,7 +14,7 @@ module.exports = async function (context, req) {
     const email = getEmail(req);
     await blockNonMember(email, context);
 
-    if (await isOverLimit(email)) {
+    if (await isOverLimit(email, context)) {
         context.res.json({
             "choices": [
                 {

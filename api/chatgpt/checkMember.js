@@ -27,7 +27,7 @@ const blockNonMember = async (email, context) => {
     }
 }
 
-const isOverLimit = async (email) => {
+const isOverLimit = async (email, context) => {
     const user = await usersTableClient.getEntity(email, email);
     limit = user.Limit ?? 0.1;
     let continuationToken = null;
