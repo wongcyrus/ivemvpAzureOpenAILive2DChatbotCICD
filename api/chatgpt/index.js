@@ -27,7 +27,7 @@ module.exports = async function (context, req) {
     }
 
     context.log("Chat");
-    let body = { ...res.body };
+    let body = { ...req.body };
     context.log(body);
 
     const model = body.model;
