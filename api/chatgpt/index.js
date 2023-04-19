@@ -27,9 +27,7 @@ module.exports = async function (context, req) {
     }
 
     context.log("Chat");
-    let body = { ...req.body };
-    context.log(body);
-
+    let body = { ...req.body };    
     const model = body.model;
     delete body.model;
     if (!process.env.openAiCognitiveDeploymentNames.split(",").find(element => model == element)) {
@@ -51,6 +49,7 @@ module.exports = async function (context, req) {
             openaiurl = `https://eastus.api.cognitive.microsoft.com/openai/deployments/${model}/chat/completions?api-version=${apiVersion}`;
             body['messages'] = body['prompt'];
             delete body['prompt'];
+            delete body['best_of'];
             body.stop = null;
             body.frequency_penalty = 0;
             body.presence_penalty = 0;
@@ -59,7 +58,7 @@ module.exports = async function (context, req) {
             openaiurl = `https://eastus.api.cognitive.microsoft.com/openai/deployments/${model}/completions?api-version=${apiVersion}`;
             body.prompt = body['prompt'].map(c => c.content).join('');
         }
-
+        context.log(body);
         const headers = {
             'Content-Type': 'application/json',
             'api-key': openaipikey,
