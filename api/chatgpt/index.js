@@ -39,9 +39,9 @@ module.exports = async function (context, req) {
         });
     }
 
-    const apiVersion = model.startsWith('gpt-4') ? "2023-03-15-preview" : "2022-12-01";
-
-    const openaiurl = `https://eastus.api.cognitive.microsoft.com/openai/deployments/${model}/completions?api-version=${apiVersion}`;
+    const apiVersion = model.startsWith('gpt-') ? "2023-03-15-preview" : "2022-12-01";
+                    // https://eastus.api.cognitive.microsoft.com/openai/deployments/gpt-4/chat/completions?api-version=2023-03-15-preview
+    const openaiurl = `https://eastus.api.cognitive.microsoft.com/openai/deployments/${model}/chat/completions?api-version=${apiVersion}`;
     try {
         const headers = {
             'Content-Type': 'application/json',
