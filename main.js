@@ -267,4 +267,42 @@ $(document).ready(async () => {
         $("#prompt").val(promptsSelect.val());
       });
     });
+
+  function stopCapture(evt) {
+    let tracks = videoElem.srcObject.getTracks();
+
+    tracks.forEach((track) => track.stop());
+    videoElem.srcObject = null;
+  }
+
+  async function startCapture(displayMediaOptions) {
+    let captureStream = null;
+
+    try {
+      captureStream = await navigator.mediaDevices.getDisplayMedia(
+        displayMediaOptions
+      );
+    } catch (err) {
+      console.error(`Error: ${err}`);
+    }
+    return captureStream;
+  }
+
+  const videoElem = document.querySelector('#shared-screen');
+  let capturing = false;
+  $('#share-screen').on('click', () => {
+    if (capturing) {
+      stopCapture();
+    } else {
+      capturing = true;
+      startCapture({ video: true })
+        .then((stream) => {
+          videoElem.srcObject = stream;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  });
+  
 });
