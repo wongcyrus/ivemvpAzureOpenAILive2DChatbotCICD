@@ -72,10 +72,12 @@ module.exports = async function (context, req) {
         let question;
         if (!model.startsWith('gpt-')) {
             res.data.choices[0]["message"] = { content: res.data.choices[0].text };
+            const lastMessage = body.prompt[body.prompt.length - 1];
+            question = lastMessage.content;
+        } else {
+            const lastMessage = body.messages[body.messages.length - 1];
+            question = lastMessage.content;
         }
-        const s = body.messages[body.messages.length - 1];
-        question = s.content;
-
 
         const now = new Date();
         const ticks = "" + now.getTime();
@@ -104,7 +106,7 @@ module.exports = async function (context, req) {
     } catch (ex) {
         context.log(ex);
         context.res.json({
-            text: "error" + ex
+            text: "" + ex
         });
     }
 }
