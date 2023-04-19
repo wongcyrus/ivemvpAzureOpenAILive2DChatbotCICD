@@ -82,9 +82,8 @@ module.exports = async function (context, req) {
 
         let response = { ...res.data };
         response['cost'] = cost;
-        tokenUsageCost += cost;
-        response['tokenUsageCost'] = tokenUsageCost;
-        response['left'] = limit - tokenUsageCost;
+        response['tokenUsageCost'] = tokenUsageCost + cost;
+        response['left'] = limit - (tokenUsageCost + cost);
         context.res.json(response);
 
     } catch (ex) {
