@@ -248,7 +248,7 @@ $(document).ready(async () => {
       }
       result.push(obj);
     }
-    return result.sort((p1, p2) => p1.localeCompare(p2));
+    return result.sort((p1, p2) => p1.act.localeCompare(p2.act));
   }
 
   const promptsSelect = $("#awesome-chatgpt-prompts");
