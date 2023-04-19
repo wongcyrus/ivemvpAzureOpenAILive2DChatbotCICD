@@ -9,7 +9,7 @@ const chatStorageAccountConnectionString = process.env.chatStorageAccountConnect
 const chatHistoryTableClient = TableClient.fromConnectionString(chatStorageAccountConnectionString, "chatHistory");
 
 module.exports = async function (context, req) {
-    const model = req.query.model;
+    
     const email = getEmail(req);
     await blockNonMember(email, context);
 
@@ -27,6 +27,8 @@ module.exports = async function (context, req) {
     const body = req.body;
     context.log(body);
 
+    const model = body.model;
+    delete body.model; 
     if (!process.env.openAiCognitiveDeploymentNames.split(",").find(element => model == element)){
         context.res.json({           
             "choices": [
