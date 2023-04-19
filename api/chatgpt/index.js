@@ -27,7 +27,7 @@ module.exports = async function (context, req) {
     }
 
     context.log("Chat");
-    let body = req.body;
+    let body = { ...res.body };
     context.log(body);
 
     const model = body.model;
@@ -44,19 +44,20 @@ module.exports = async function (context, req) {
 
     try {
 
+
         let openaiurl;
         if (model.startsWith('gpt-')) {
             const apiVersion = "2023-03-15-preview";
             openaiurl = `https://eastus.api.cognitive.microsoft.com/openai/deployments/${model}/chat/completions?api-version=${apiVersion}`;
             body['messages'] = body['prompt'];
             delete body['prompt'];
-            body['stop'] = null;
-            body['frequency_penalty'] = 0;
-            body['presence_penalty'] = 0;
+            body.stop = null;
+            body.frequency_penalty = 0;
+            body.presence_penalty = 0;
         } else {
             const apiVersion = "2022-12-01";
             openaiurl = `https://eastus.api.cognitive.microsoft.com/openai/deployments/${model}/completions?api-version=${apiVersion}`;
-            body['prompt'] = body['prompt'].map(c => c.content).join('');
+            body.prompt = body['prompt'].map(c => c.content).join('');
         }
 
         const headers = {
