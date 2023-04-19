@@ -28,8 +28,8 @@ const blockNonMember = async (email, context) => {
 }
 
 const isOverLimit = async (email) => {
-    const user = await usersTableClient.getEntity(email, email);  
-    limit = user.Limit ?? 50000;
+    const user = await usersTableClient.getEntity(email, email);
+    limit = user.Limit ?? 0.1;
     let continuationToken = null;
     let pageEntities = undefined;
     let entities = [];
@@ -46,11 +46,12 @@ const isOverLimit = async (email) => {
         entities = entities.concat(pageEntities);
     }
     while (continuationToken !== undefined);
-    const tokenUsage = entities.reduce((acc, cur) => {
-        acc += cur.TotalTokens;
+    const tokenUsageCost = entities.reduce((acc, cur) => {
+        acc += cur.Cost;
         return acc;
-    }, 0);    
-    return tokenUsage > limit;
+    }, 0);
+    context.log(email + " used " + tokenUsageCost + " tokens today.");
+    return tokenUsageCost > limit;
 };
 
 module.exports = {

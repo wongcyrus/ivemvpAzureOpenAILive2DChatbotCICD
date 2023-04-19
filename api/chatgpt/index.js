@@ -1,7 +1,7 @@
 const axios = require('axios');
 const { TableClient } = require("@azure/data-tables");
 const { getEmail, blockNonMember, isOverLimit } = require("./checkMember");
-const { prices } = require("./price");
+const { calculateCost } = require("./price");
 
 
 const openaipikey = process.env.openAiCognitiveAccount;
@@ -72,6 +72,7 @@ module.exports = async function (context, req) {
             CompletionTokens: res.data.usage.completion_tokens,
             PromptTokens: res.data.usage.prompt_tokens,
             TotalTokens: res.data.usage.total_tokens,
+            Cost: calculateCost(model, res.data.usage.completion_tokens, res.data.usage.prompt_tokens)
         };
         context.log(chatEntity);
         await chatHistoryTableClient.createEntity(chatEntity);
