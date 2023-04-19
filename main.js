@@ -292,16 +292,20 @@ $(document).ready(async () => {
   let capturing = false;
   $('#share-screen').on('click', () => {
     if (capturing) {
+      capturing = false;
       stopCapture();
     } else {
       capturing = true;
-      startCapture({ video: true })
-        .then((stream) => {
-          videoElem.srcObject = stream;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      startCapture({
+        video: {
+          displaySurface: "window",
+        },
+        audio: false,
+      }).then((stream) => {
+        videoElem.srcObject = stream;
+      }).catch((err) => {
+        console.log(err);
+      });
     }
   });
 
