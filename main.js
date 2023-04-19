@@ -288,11 +288,26 @@ $(document).ready(async () => {
     return captureStream;
   }
 
+  function saveVideoToJpg() {
+    const canvas = document.createElement('canvas');
+    // canvas.width = videoElem.videoWidth;
+    // canvas.height = videoElem.videoHeight;
+    canvas.width = 1920;
+    canvas.height = 1080;
+    canvas.getContext('2d').drawImage(videoElem, 0, 0);
+    const img = canvas.toDataURL('image/jpeg');
+    console.log(img);
+    return img;
+  }
+
+
   const videoElem = document.getElementById('shared-screen');
+  let capturer;
   let capturing = false;
   $('#share-screen').on('click', () => {
     if (capturing) {
       capturing = false;
+      clearTimeout(capturer);
       stopCapture();
     } else {
       capturing = true;
@@ -303,6 +318,7 @@ $(document).ready(async () => {
         audio: false,
       }).then((stream) => {
         videoElem.srcObject = stream;
+        capturer = setTimeout(saveVideoToJpg, 3000);
       }).catch((err) => {
         console.log(err);
       });
