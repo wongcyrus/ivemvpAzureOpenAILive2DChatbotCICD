@@ -5,7 +5,7 @@ const { getEmail, blockNonTeacherMember } = require("./checkMember");
 const storageAccountConnectionString = process.env.chatStorageAccountConnectionString;
 
 const blobServiceClient = BlobServiceClient.fromConnectionString(storageAccountConnectionString);
-const containerClient = blobServiceClient.getContainerClient("screens");
+const containerClient = blobServiceClient.getContainerClient("screen");
 
 
 const chatStorageAccountConnectionString = process.env.chatStorageAccountConnectionString;
@@ -39,7 +39,7 @@ module.exports = async function (context, req) {
     }
     while (continuationToken !== undefined);
 
-    const screens = entities.map(async entity => {
+    const screens = await Promise.all(entities.map(async entity => {
         const studentEmail = entity.rowKey;
         context.log(studentEmail);
         const blobName = studentEmail.replace(/[^a-zA-Z0-9 ]/g, '_') + ".jpeg";
@@ -51,8 +51,9 @@ module.exports = async function (context, req) {
             expiresOn: new Date(new Date().valueOf() + (3 * 60 * 60 * 1000))
         });
         context.log(sasUrl);
-        return ({ email: studentEmail, sasUrl });
-    });
+        return { email: studentEmail, sasUrl };
+    }));
+
 
     context.res.json(screens);
 }
