@@ -43,7 +43,7 @@ $(document).ready(async () => {
         console.log(data);
     }
 
-    $("#classIdSubmit").on("click", async (evt) => {
+    $("#auto-refresh").on("click", async (evt) => {
         evt.preventDefault();
 
         refreshImageInterval = setInterval(refreshImage, 5000);

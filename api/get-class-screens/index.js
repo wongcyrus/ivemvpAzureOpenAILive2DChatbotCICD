@@ -46,7 +46,7 @@ module.exports = async function (context, req) {
         context.log(studentEmail);
 
         const blobName = studentEmail.replace(/[^a-zA-Z0-9 ]/g, '_') + ".jpeg";
-        const blobClient = client.getBlobClient(blobName);
+        const blobClient = containerClient.getBlobClient(blobName);
         const sasUrl = blobClient.generateSasUrl({
             permissions: BlobSASPermissions.parse("r"),
             startsOn: new Date(),
