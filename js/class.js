@@ -48,7 +48,7 @@ $(document).ready(async () => {
             const { email, sasUrl } = screen;
             const img = $(`
             <div class="col-sm-6 col-md-4 mb-3">
-                <img src="${sasUrl}" alt="${email}" class="fluid img-thumbnail"/>
+                <a href="${sasUrl}" target="_blank"><img src="${sasUrl}" alt="${email}" class="fluid img-thumbnail"/><a/>
             </div>`);
             screens.append(img);
         });

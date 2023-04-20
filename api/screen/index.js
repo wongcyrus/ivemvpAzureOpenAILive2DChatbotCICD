@@ -1,5 +1,5 @@
 const { BlobServiceClient } = require("@azure/storage-blob");
-const { getEmail, blockNonMember } = require("./checkMember");
+const { getEmail, blockNonMember, blockInvalidSession } = require("./checkMember");
 
 const storageAccountConnectionString = process.env.chatStorageAccountConnectionString;
 
@@ -20,6 +20,7 @@ function getDateTimeStringAsFilename() {
 module.exports = async function (context, req) {
     const email = getEmail(req);
     await blockNonMember(email, context);
+    await blockInvalidSession(email, context);
 
     try {
         const regex = /^data:.+\/(.+);base64,(.*)$/;
@@ -27,8 +28,6 @@ module.exports = async function (context, req) {
         const ext = matches[1];
         const data = matches[2];
         const bodyBuffer = new Uint8Array(Buffer.from(data, 'base64'));
-        // const tempName = temp.path({ suffix: '.jpg' });
-        // fs.writeFileSync(tempName, bodyBuffer);
 
         const blobName = email.replace(/[^a-zA-Z0-9 ]/g, '_') + "." + ext;
         const blockBlobClient = containerClient.getBlockBlobClient(blobName);
@@ -38,7 +37,6 @@ module.exports = async function (context, req) {
         const timeBlobName = email + "/" + getDateTimeStringAsFilename() + "." + ext;
         const destinationBlobClient = await containerClient.getBlobClient(timeBlobName);
         await destinationBlobClient.beginCopyFromURL(blockBlobClient.url);
-
 
         context.res = {
             headers: { 'Content-Type': 'application/json' },

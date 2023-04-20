@@ -48,7 +48,7 @@ module.exports = async function (context, req) {
             protocol: SASProtocol.Https,
             permissions: BlobSASPermissions.parse("r"),
             startsOn: new Date(),
-            expiresOn: new Date(new Date().valueOf() + (3 * 60 * 60 * 1000))
+            expiresOn: new Date(new Date().valueOf() + (1 * 60 * 1000))
         });
         context.log(sasUrl);
         return { email: studentEmail, sasUrl };
