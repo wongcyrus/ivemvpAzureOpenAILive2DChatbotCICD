@@ -54,6 +54,5 @@ module.exports = async function (context, req) {
         return { email: studentEmail, sasUrl };
     }));
 
-
     context.res.json(screens);
 }
