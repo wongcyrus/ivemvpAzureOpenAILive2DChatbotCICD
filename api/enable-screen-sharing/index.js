@@ -36,12 +36,12 @@ module.exports = async function (context, req) {
         context.log(entity);
         const studentEmail = entity.rowKey;
         context.log(studentEmail);
-        await sessionsTableClient.updateEntity(
+        await sessionsTableClient.upsertEntity(
             {
                 partitionKey: studentEmail,
                 rowKey: studentEmail,
                 TeacherEmail: teacherEmail
-            }
+            }, "Replace"
         );
     }
 
