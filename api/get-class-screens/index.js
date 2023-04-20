@@ -39,21 +39,20 @@ module.exports = async function (context, req) {
     }
     while (continuationToken !== undefined);
 
-    const screens = [];
-    for (let i = 0; i < entities.length; i++) {
-        const entity = entities[i];
+    const screens = entities.map(async entity => {
         const studentEmail = entity.rowKey;
         context.log(studentEmail);
         const blobName = studentEmail.replace(/[^a-zA-Z0-9 ]/g, '_') + ".jpeg";
         const blobClient = containerClient.getBlobClient(blobName);
-        const sasUrl = blobClient.generateSasUrl({
+        const sasUrl = await blobClient.generateSasUrl({
             protocol: SASProtocol.Https,
             permissions: BlobSASPermissions.parse("r"),
             startsOn: new Date(),
             expiresOn: new Date(new Date().valueOf() + (3 * 60 * 60 * 1000))
         });
         context.log(sasUrl);
-        screens.push({ email: studentEmail, sasUrl });
-    }
+        return { email: studentEmail, sasUrl };
+    });
+
     context.res.json(screens);
 }
