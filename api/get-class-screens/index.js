@@ -1,16 +1,17 @@
-const { TableClient } = require("@azure/data-tables");
+const { TableClient, BlobSASPermissions } = require("@azure/data-tables");
+const { BlobServiceClient } = require("@azure/storage-blob");
 const { getEmail, blockNonTeacherMember } = require("./checkMember");
 
 const storageAccountConnectionString = process.env.chatStorageAccountConnectionString;
 
 const blobServiceClient = BlobServiceClient.fromConnectionString(storageAccountConnectionString);
-const containerClient = blobServiceClient.getContainerClient("screen");
+const containerClient = blobServiceClient.getContainerClient("screens");
 
 
 const chatStorageAccountConnectionString = process.env.chatStorageAccountConnectionString;
 
 const classesTableClient = TableClient.fromConnectionString(chatStorageAccountConnectionString, "classes");
-const screensTableClient = TableClient.fromConnectionString(chatStorageAccountConnectionString, "screens");
+// const screensTableClient = TableClient.fromConnectionString(chatStorageAccountConnectionString, "screen");
 
 
 module.exports = async function (context, req) {
@@ -38,11 +39,21 @@ module.exports = async function (context, req) {
     }
     while (continuationToken !== undefined);
 
+    const screens = [];
     for (let i = 0; i < entities.length; i++) {
         const entity = entities[i];
         const studentEmail = entity.rowKey;
         context.log(studentEmail);
-  
+
+        const blobName = studentEmail.replace(/[^a-zA-Z0-9 ]/g, '_') + ".jpeg";
+        const blobClient = client.getBlobClient(blobName);
+        const sasUrl = blobClient.generateSasUrl({
+            permissions: BlobSASPermissions.parse("r"),
+            startsOn: new Date(),
+            expiresOn: new Date(new Date().valueOf() + (3 * 60 * 60 * 1000))
+        });
+        context.log(sasUrl);
+        screens.push({ email: studentEmail, sasUrl });
     }
-    context.res.json({ message: "ok" });
+    context.res.json(screens);
 }
