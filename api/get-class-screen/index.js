@@ -1,11 +1,16 @@
 const { TableClient } = require("@azure/data-tables");
 const { getEmail, blockNonTeacherMember } = require("./checkMember");
 
+const storageAccountConnectionString = process.env.chatStorageAccountConnectionString;
+
+const blobServiceClient = BlobServiceClient.fromConnectionString(storageAccountConnectionString);
+const containerClient = blobServiceClient.getContainerClient("screen");
+
 
 const chatStorageAccountConnectionString = process.env.chatStorageAccountConnectionString;
 
 const classesTableClient = TableClient.fromConnectionString(chatStorageAccountConnectionString, "classes");
-const sessionsTableClient = TableClient.fromConnectionString(chatStorageAccountConnectionString, "sessions");
+const screensTableClient = TableClient.fromConnectionString(chatStorageAccountConnectionString, "screens");
 
 
 module.exports = async function (context, req) {
@@ -24,14 +29,7 @@ module.exports = async function (context, req) {
         for (let i = 0; i < entities.length; i++) {
             const entity = entities[i];
             const studentEmail = entity.RowKey;
-            context.log(studentEmail);
-            await sessionsTableClient.updateEntity(
-                {
-                    partitionKey: studentEmail,
-                    rowKey: studentEmail,
-                    TeacherEmail: email
-                }
-            );
+            context.log(studentEmail);            
         }
     });
     context.res.json({ message: "ok" });

@@ -1,7 +1,5 @@
 const { BlobServiceClient } = require("@azure/storage-blob");
 const { getEmail, blockNonMember } = require("./checkMember");
-// const temp = require('temp');
-// const fs = require('fs');
 
 const storageAccountConnectionString = process.env.chatStorageAccountConnectionString;
 
