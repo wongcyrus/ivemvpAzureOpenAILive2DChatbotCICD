@@ -18,19 +18,31 @@ module.exports = async function (context, req) {
     const email = getEmail(req);
     await blockNonTeacherMember(email, context);
 
+    const teacherEmail = getEmail(req);
+    await blockNonTeacherMember(teacherEmail, context);
+
     const classId = req.query.classId;
 
-    classesTableClient.listEntities({
-        queryOptions: {
-            filter: `PartitionKey eq '${classId}'`
-        }
-    }).byPage({ maxPageSize: 300 }).next().then(async (page) => {
-        const entities = page.value;
-        for (let i = 0; i < entities.length; i++) {
-            const entity = entities[i];
-            const studentEmail = entity.RowKey;
-            context.log(studentEmail);            
-        }
-    });
+    let continuationToken = null;
+    let pageEntities = undefined;
+    let entities = [];
+    do {
+        const page = await classesTableClient.listEntities({
+            queryOptions: {
+                filter: `PartitionKey eq '${classId}'`
+            }
+        }).byPage({ maxPageSize: 100, continuationToken: continuationToken }).next();
+        pageEntities = page.value;
+        continuationToken = pageEntities.continuationToken;
+        entities = entities.concat(pageEntities);
+    }
+    while (continuationToken !== undefined);
+
+    for (let i = 0; i < entities.length; i++) {
+        const entity = entities[i];
+        const studentEmail = entity.RowKey;
+        context.log(studentEmail);
+  
+    }
     context.res.json({ message: "ok" });
 }
