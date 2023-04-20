@@ -45,10 +45,11 @@ $(document).ready(async () => {
 
         screens.empty();
         data.forEach(screen => {
-            const { email, sasUrl } = screen;
+            const { email, sasUrl, name } = screen;
             const img = $(`
             <div class="col-sm-6 col-md-4 mb-3">
-                <a href="${sasUrl}" target="_blank" rel="noopener noreferrer"><img src="${sasUrl}" alt="${email}" class="fluid img-thumbnail"/><a/>
+                <h6>${name}</h6>
+                <a href="${sasUrl}" target="_blank" rel="noopener noreferrer"><img src="${sasUrl}" alt="${email}" class="fluid img-thumbnail"/><a/>                
             </div>`);
             screens.append(img);
         });
