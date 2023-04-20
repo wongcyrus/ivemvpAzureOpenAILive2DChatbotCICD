@@ -30,7 +30,7 @@ async function blockInvalidSession(email, context) {
     let pageEntities = undefined;
     let entities = [];
     const miniStartTime = new Date();
-    miniStartTime.setHours(miniStartTime.setHours() - 3);
+    miniStartTime.setHours(miniStartTime.getHours() - 3);
     do {
         const page = await sessionsTableClient.listEntities({
             queryOptions: {
@@ -43,7 +43,7 @@ async function blockInvalidSession(email, context) {
     }
     while (continuationToken !== undefined);
 
-    if( entities.length === 0){
+    if (entities.length === 0) {
         context.res = {
             status: 401,
             headers: { 'Content-Type': 'application/json' },
