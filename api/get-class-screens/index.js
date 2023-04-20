@@ -51,7 +51,7 @@ module.exports = async function (context, req) {
             expiresOn: new Date(new Date().valueOf() + (3 * 60 * 60 * 1000))
         });
         context.log(sasUrl);
-        return { email: studentEmail, sasUrl };
+        return ({ email: studentEmail, sasUrl });
     });
 
     context.res.json(screens);
