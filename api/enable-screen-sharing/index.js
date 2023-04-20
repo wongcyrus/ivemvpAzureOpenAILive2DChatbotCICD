@@ -25,6 +25,7 @@ module.exports = async function (context, req) {
             }
         }).byPage({ maxPageSize: 100, continuationToken: continuationToken }).next();
         pageEntities = page.value;
+        if (!pageEntities) break;
         continuationToken = pageEntities.continuationToken;
         entities = entities.concat(pageEntities);
     }
@@ -32,7 +33,8 @@ module.exports = async function (context, req) {
 
     for (let i = 0; i < entities.length; i++) {
         const entity = entities[i];
-        const studentEmail = entity.RowKey;
+        context.log(entity);
+        const studentEmail = entity.rowKey;
         context.log(studentEmail);
         await sessionsTableClient.updateEntity(
             {

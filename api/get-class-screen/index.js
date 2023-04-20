@@ -40,7 +40,7 @@ module.exports = async function (context, req) {
 
     for (let i = 0; i < entities.length; i++) {
         const entity = entities[i];
-        const studentEmail = entity.RowKey;
+        const studentEmail = entity.rowKey;
         context.log(studentEmail);
   
     }

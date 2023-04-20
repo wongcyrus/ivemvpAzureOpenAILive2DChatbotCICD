@@ -9,6 +9,9 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="css/class.css">
+
 </head>
 
 <body>
@@ -16,8 +19,6 @@
 
         <!-- Content here -->
         <a class="member" href="/.auth/logout">Logout</a>
-
-
         <h1>Class View</h1>
         <form>
             <div class="form-row">
@@ -25,10 +26,60 @@
                     <input type="text" class="form-control" placeholder="Class" id="classId" />
                 </div>
                 <div class=" col">
-                    <button type="submit" class="btn btn-primary" id="classIdSubmit">Enable Screen Sharing for 3 hours</button>
+                    <button type="submit" class="btn btn-primary" id="classIdSubmit">Enable Screen Sharing for 3
+                        hours</button>
                 </div>
             </div>
         </form>
+
+        <div id="links">
+            <!-- <a href="images/banana.jpg" title="Banana" data-gallery>
+              <img src="images/thumbnails/banana.jpg" alt="Banana">
+            </a>
+            <a href="images/apple.jpg" title="Apple" data-gallery>
+              <img src="images/thumbnails/apple.jpg" alt="Apple">
+            </a>
+            <a href="images/orange.jpg" title="Orange" data-gallery>
+              <img src="images/thumbnails/orange.jpg" alt="Orange">
+            </a>-->
+        </div>
+
+    </div>
+
+
+    <!-- The Bootstrap Image Gallery lightbox, should be a child element of the document body -->
+    <div id="blueimp-gallery" class="blueimp-gallery">
+        <!-- The container for the modal slides -->
+        <div class="slides"></div>
+        <!-- Controls for the borderless lightbox -->
+        <h3 class="title"></h3>
+        <a class="prev">‹</a>
+        <a class="next">›</a>
+        <a class="close">×</a>
+        <a class="play-pause"></a>
+        <ol class="indicator"></ol>
+        <!-- The modal dialog, which will be used to wrap the lightbox content -->
+        <div class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title"></h4>
+                    </div>
+                    <div class="modal-body next"></div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left prev">
+                            <i class="glyphicon glyphicon-chevron-left"></i>
+                            Previous
+                        </button>
+                        <button type="button" class="btn btn-primary next">
+                            Next
+                            <i class="glyphicon glyphicon-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
