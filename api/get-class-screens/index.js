@@ -1,5 +1,5 @@
-const { TableClient, BlobSASPermissions } = require("@azure/data-tables");
-const { BlobServiceClient } = require("@azure/storage-blob");
+const { TableClient } = require("@azure/data-tables");
+const { BlobServiceClient,BlobSASPermissions } = require("@azure/storage-blob");
 const { getEmail, blockNonTeacherMember } = require("./checkMember");
 
 const storageAccountConnectionString = process.env.chatStorageAccountConnectionString;
@@ -44,10 +44,10 @@ module.exports = async function (context, req) {
         const entity = entities[i];
         const studentEmail = entity.rowKey;
         context.log(studentEmail);
-
         const blobName = studentEmail.replace(/[^a-zA-Z0-9 ]/g, '_') + ".jpeg";
         const blobClient = containerClient.getBlobClient(blobName);
         const sasUrl = blobClient.generateSasUrl({
+            protocol: SASProtocol.Https,
             permissions: BlobSASPermissions.parse("r"),
             startsOn: new Date(),
             expiresOn: new Date(new Date().valueOf() + (3 * 60 * 60 * 1000))

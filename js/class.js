@@ -30,6 +30,7 @@ $(document).ready(async () => {
         console.log(data);
     });
 
+    const screens = $("#screens");
     let refreshImageInterval = null;
     async function refreshImage() {
         const classId = $("#classId").val();
@@ -41,23 +42,34 @@ $(document).ready(async () => {
         });
         const data = await response.json();
         console.log(data);
+
+        screens.empty();
+        data.forEach(screen => {
+            const { email, sasUrl } = screen;
+            const img = $(`
+            <div class="col-sm-6 col-md-4 mb-3">
+                <img src="${sasUrl}" alt="${email}" class="fluid img-thumbnail"/>
+            </div>`);
+            screens.append(img);
+        });
     }
 
-    $("#auto-refresh").on("click", async (evt) => {
+    let started = false;
+    const autoRefresh = $("#auto-refresh");
+    autoRefresh.on("click", async (evt) => {
         evt.preventDefault();
 
-        refreshImageInterval = setInterval(refreshImage, 5000);
-        refreshImage();
-
-        // const classId = $("#classId").val();
-        // const response = await fetch(`/api/enable-screen-sharing?classId=${classId}`, {
-        //     method: "POST",
-        //     headers: {
-        //         "Content-Type": "application/json",
-        //     }
-        // });
-        // const data = await response.json();
-        // console.log(data);
+        if (started) {
+            clearInterval(refreshImageInterval);
+            autoRefresh.html("Start Auto Refresh");
+            started = false;
+        }
+        else {
+            refreshImageInterval = setInterval(refreshImage, 5000);
+            refreshImage();
+            autoRefresh.html("Stop Auto Refresh");
+            started = true;
+        }
     });
 
 });
