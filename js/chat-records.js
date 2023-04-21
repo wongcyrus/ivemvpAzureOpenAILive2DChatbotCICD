@@ -21,8 +21,8 @@ $(document).ready(async () => {
     const tableBody = $("#table-body");
     $("#email-submit").on("click", async (evt) => {
         evt.preventDefault();
-        const start = $("#start").val();   
-        const end = $("#end").val();
+        const start = new Date($("#start").val());
+        const end = new Date($("#end").val());
         const email = $("#email").val();
         const response = await fetch(`/api/chat-records?email=${email}&start=${start.toISOString()}&end=${end.toISOString()}`, {
             method: "POST",
