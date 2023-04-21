@@ -60,7 +60,10 @@ module.exports = async function (context, req) {
             setErrorJson(context, `File size is too large. Max ${screenSharingMaxSize} MB`, 403);
             return;
         }
-        if (await IsOverRateLimit(containerClient, email + "/" + getDateTimeStringAsFilename())){
+        
+        let prefix = email + "/" + getDateTimeStringAsFilename();
+        prefix = prefix.substring(0, prefix.lastIndexOf("-"));
+        if (await IsOverRateLimit(containerClient, prefix)) {
             setErrorJson(context, `Rate limit exceeded. Max ${screenSharingRate} per minute`, 403);
             return;
         }
