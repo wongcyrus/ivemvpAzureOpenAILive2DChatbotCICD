@@ -18,7 +18,7 @@ function getDateTimeStringAsFilename() {
     const second = now.getSeconds();
     return `${year}-${month}-${day}-${hour}-${minute}-${second}`;
 }
-async function IsOverRateLimit(containerClient, prefix) {
+async function isOverRateLimit(containerClient, prefix) {
     // page size - artificially low as example
     const maxPageSize = screenSharingPerMinute * 2;
     const listOptions = {
@@ -61,8 +61,8 @@ module.exports = async function (context, req) {
         }
 
         const timeBlobName = email + "/" + getDateTimeStringAsFilename() + "." + ext;;
-        const prefix = timeBlobName.substring(0, prefix.lastIndexOf("-"));
-        if (await IsOverRateLimit(containerClient, prefix)) {
+        const prefix = timeBlobName.substring(0, timeBlobName.lastIndexOf("-"));
+        if (await isOverRateLimit(containerClient, prefix)) {
             setErrorJson(context, `Rate limit exceeded. Max ${screenSharingRate} per minute`, 403);
             return;
         }
