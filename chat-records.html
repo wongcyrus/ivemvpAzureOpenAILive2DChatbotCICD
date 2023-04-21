@@ -25,11 +25,23 @@
                 <form>
                     <div class="form-row">
                         <div class="col">
+                            <label for="email" class="col-form-label">Email:</label>
                             <input type="email" class="form-control" placeholder="Email" id="email" />
                         </div>
-                        <div class=" col">
-                            <button type="submit" class="btn btn-primary" id="email-submit">Show</button>
+                        <div class="col">
+                            <label for="start" class="col-form-label">Start:</label>
+                            <input type="datetime-local" id="start" name="start" min="2023-01-01T00:00"
+                                max="2033-01-01T00:00" class="form-control">
                         </div>
+                        <div class="col">
+                            <label for="end" class="col-form-label">End:</label>
+                            <input type="datetime-local" id="end" name="end" min="2023-01-01T00:00"
+                                max="2033-01-01T00:00" class="form-control">
+                        </div>     
+                        <div class=" col">
+                            <button type="submit" class="btn btn-primary" id="email-submit">Load</button>
+                        </div>
+
                     </div>
                 </form>
             </div>
@@ -37,28 +49,21 @@
         <div class="row" id="records">
             <table class="table table-striped">
                 <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">User</th>
-                    <th scope="col">AI</th>
-                    <th scope="col">Model</th>
-                    <th scope="col">Prompt Tokens</th>
-                    <th scope="col">Completion Tokens</th>
-                    <th scope="col">Total Tokens</th>
-                    <th scope="col">Cost</th>
-                    <th scope="col">Time</th>
-                  </tr>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">User</th>
+                        <th scope="col">AI</th>
+                        <th scope="col">Model</th>
+                        <th scope="col">Prompt Tokens</th>
+                        <th scope="col">Completion Tokens</th>
+                        <th scope="col">Total Tokens</th>
+                        <th scope="col">Cost</th>
+                        <th scope="col">Time</th>
+                    </tr>
                 </thead>
                 <tbody id="table-body">
-                  <!-- <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                  </tr> -->
-                  
                 </tbody>
-              </table>
+            </table>
         </div>
     </div>
 

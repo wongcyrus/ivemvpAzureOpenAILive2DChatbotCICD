@@ -17,13 +17,12 @@ $(document).ready(async () => {
         $(".nonmember").show();
     }
 
+    let currentChatRecord;
     const tableBody = $("#table-body");
     $("#email-submit").on("click", async (evt) => {
         evt.preventDefault();
-        const start = new Date();
-        start.setHours(start.getHours() - 24);
-        const end = new Date();
-
+        const start = $("#start").val();   
+        const end = $("#end").val();
         const email = $("#email").val();
         const response = await fetch(`/api/chat-records?email=${email}&start=${start.toISOString()}&end=${end.toISOString()}`, {
             method: "POST",
@@ -33,6 +32,7 @@ $(document).ready(async () => {
         });
         const data = await response.json();
         console.log(data);
+        currentChatRecord = data;
         let rowCount = 1;
         tableBody.empty();
         data.forEach(chat => {
