@@ -32,7 +32,7 @@ async function IsOverRateLimit(containerClient, prefix) {
     let iterator = containerClient.listBlobsFlat(listOptions).byPage({ maxPageSize });
     let response = (await iterator.next()).value;
     let count = response.segment.blobItems.length;
-    return count > screenSharingRate;
+    return count > screenSharingPerMinute;
 }
 
 module.exports = async function (context, req) {
