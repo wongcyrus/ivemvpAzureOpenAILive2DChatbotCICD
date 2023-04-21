@@ -63,7 +63,7 @@ module.exports = async function (context, req) {
         const timeBlobName = email + "/" + getDateTimeStringAsFilename() + "." + ext;;
         const prefix = timeBlobName.substring(0, timeBlobName.lastIndexOf("-"));
         if (await isOverRateLimit(containerClient, prefix)) {
-            setErrorJson(context, `Rate limit exceeded. Max ${screenSharingRate} per minute`, 403);
+            setErrorJson(context, `Rate limit exceeded. Max ${screenSharingPerMinute} per minute`, 403);
             return;
         }
 
