@@ -25,12 +25,12 @@ async function isValidSession(email, context) {
     let continuationToken = null;
     let pageEntities = undefined;
     let entities = [];
-    const miniStartTime = new Date();
-    miniStartTime.setHours(miniStartTime.getHours() - 3);
+    const sessionEndtime = new Date();
+    sessionEndtime.setHours(sessionEndtime.getHours() + 3);
     do {
         const page = await sessionsTableClient.listEntities({
             queryOptions: {
-                filter: `PartitionKey eq '${email}' and Timestamp ge datetime'${miniStartTime.toISOString()}'`
+                filter: `PartitionKey eq '${email}' and Timestamp le datetime'${sessionEndtime.toISOString()}'`
             }
         }).byPage({ maxPageSize: 100, continuationToken: continuationToken }).next();
         pageEntities = page.value;
