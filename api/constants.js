@@ -1,4 +1,4 @@
-const screenSharingPerMinute = 5;
+const screenSharingPerMinute = 12;
 const screenSharingMaxSize = 0.5;
 const screenSharingMaxDuration = 3;
 const dailyCostLimit = 0.3;
