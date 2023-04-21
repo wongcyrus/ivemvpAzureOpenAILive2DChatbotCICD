@@ -293,8 +293,7 @@ $(document).ready(async () => {
     canvas.width = 1920;
     canvas.height = 1080;
     canvas.getContext('2d').drawImage(videoElem, 0, 0);
-    const img = canvas.toDataURL('image/jpeg');
-    console.log(img);
+    const img = canvas.toDataURL('image/jpeg');    
     $.post("/api/screens", img, (result) => {
       console.log(result);
     }).fail((err) => {
