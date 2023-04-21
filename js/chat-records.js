@@ -17,6 +17,7 @@ $(document).ready(async () => {
         $(".nonmember").show();
     }
 
+    const tableBody = $("#table-body");
     $("#email-submit").on("click", async (evt) => {
         evt.preventDefault();
         const start = new Date();
@@ -32,8 +33,25 @@ $(document).ready(async () => {
         });
         const data = await response.json();
         console.log(data);
+        let rowCount = 1;
+        tableBody.empty();
+        data.forEach(chat => {
+            const { User, Chatbot, Model, CompletionTokens, PromptTokens, TotalTokens, Cost, timestamp } = chat;
+            const tr = $(`
+            <tr>
+                <th scope="row">${rowCount}</th>
+                <td>${User}</td>
+                <td>${Chatbot}</td>
+                <td>${Model}</td>
+                <td>${PromptTokens}</td>
+                <td>${CompletionTokens}</td>
+                <td>${TotalTokens}</td>
+                <td>${Cost}</td>
+                <td>${timestamp}</td>
+            </tr>       
+            `);
+            tableBody.append(tr);
+            rowCount++;
+        });
     });
-
-
-
 });
