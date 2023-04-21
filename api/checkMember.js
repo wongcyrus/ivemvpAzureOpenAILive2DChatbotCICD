@@ -1,5 +1,5 @@
 const { TableClient } = require("@azure/data-tables");
-const { screenSharingMaxCost, screenSharingMaxDuration } = require("./constants");
+const { dailyCostLimit, screenSharingMaxDuration } = require("./constants");
 
 const chatStorageAccountConnectionString = process.env.chatStorageAccountConnectionString;
 const usersTableClient = TableClient.fromConnectionString(chatStorageAccountConnectionString, "users");
@@ -41,7 +41,7 @@ const isOverLimit = (email, tokenUsageCost, limit, context) => {
 
 async function getUsageLimit(email) {
     const user = await usersTableClient.getEntity(email, email);
-    const limit = user.Limit ?? screenSharingMaxCost;
+    const limit = user.Limit ?? dailyCostLimit;
     return limit;
 }
 

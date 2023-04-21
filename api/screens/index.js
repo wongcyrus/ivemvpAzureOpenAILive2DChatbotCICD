@@ -1,7 +1,7 @@
 const { BlobServiceClient } = require("@azure/storage-blob");
 const { getEmail, isMember, isValidSession } = require("../checkMember");
 const { setJson, setErrorJson } = require("../contextHelper");
-const { screenSharingMaxSize, screenSharingRate } = require("../constants");
+const { screenSharingMaxSize, screenSharingPerMinute } = require("../constants");
 
 const storageAccountConnectionString = process.env.chatStorageAccountConnectionString;
 
@@ -18,10 +18,9 @@ function getDateTimeStringAsFilename() {
     const second = now.getSeconds();
     return `${year}-${month}-${day}-${hour}-${minute}-${second}`;
 }
-async function IsOverRateLimit(containerClient, prefix,context) {
+async function IsOverRateLimit(containerClient, prefix) {
     // page size - artificially low as example
-    const maxPageSize = 60 / screenSharingRate + 10;
-    context.log(maxPageSize);
+    const maxPageSize = screenSharingPerMinute * 2;
     const listOptions = {
         includeMetadata: false,
         includeSnapshots: false,
@@ -32,10 +31,7 @@ async function IsOverRateLimit(containerClient, prefix,context) {
 
     let iterator = containerClient.listBlobsFlat(listOptions).byPage({ maxPageSize });
     let response = (await iterator.next()).value;
-
     let count = response.segment.blobItems.length;
-    context.log(count);
-    context.log(screenSharingRate);
     return count > screenSharingRate;
 }
 
@@ -64,9 +60,9 @@ module.exports = async function (context, req) {
             return;
         }
 
-        let prefix = email + "/" + getDateTimeStringAsFilename();
-        prefix = prefix.substring(0, prefix.lastIndexOf("-"));
-        if (await IsOverRateLimit(containerClient, prefix, context)) {
+        const timeBlobName = email + "/" + getDateTimeStringAsFilename() + "." + ext;;
+        const prefix = timeBlobName.substring(0, prefix.lastIndexOf("-"));
+        if (await IsOverRateLimit(containerClient, prefix)) {
             setErrorJson(context, `Rate limit exceeded. Max ${screenSharingRate} per minute`, 403);
             return;
         }
@@ -76,7 +72,6 @@ module.exports = async function (context, req) {
         const uploadBlobResponse = await blockBlobClient.uploadData(bodyBuffer);
         context.log(`Upload block blob ${blobName} successfully`, uploadBlobResponse.requestId);
 
-        const timeBlobName = email + "/" + getDateTimeStringAsFilename() + "." + ext;
         const destinationBlobClient = await containerClient.getBlobClient(timeBlobName);
         await destinationBlobClient.beginCopyFromURL(blockBlobClient.url);
 

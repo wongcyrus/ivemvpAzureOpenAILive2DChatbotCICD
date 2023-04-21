@@ -1,7 +1,7 @@
-const screenSharingRate = 1;
+const screenSharingPerMinute = 5;
 const screenSharingMaxSize = 0.5;
 const screenSharingMaxDuration = 3;
-const screenSharingMaxCost = 0.3;
+const dailyCostLimit = 0.3;
 
 const prices = {
     'text-ada-001': { "completion": { tokens: 1000, price: 0.0004 }, "prompt": { tokens: 1000, price: 0.0004 } },
@@ -16,9 +16,9 @@ const prices = {
 
 
 module.exports = {
-    screenSharingRate,
+    screenSharingPerMinute,
     screenSharingMaxSize,
     screenSharingMaxDuration,
-    screenSharingMaxCost,
+    dailyCostLimit,
     prices
 }
