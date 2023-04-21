@@ -16,9 +16,7 @@ const classesTableClient = TableClient.fromConnectionString(chatStorageAccountCo
 
 
 module.exports = async function (context, req) {
-
     const teacherEmail = getEmail(req);
-    await blockNonTeacherMember(teacherEmail, context);
 
     if (!await isTeacher(teacherEmail, context)) {
         setErrorJson(context, "Unauthorized", 401);
