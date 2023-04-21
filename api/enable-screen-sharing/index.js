@@ -1,6 +1,6 @@
 const { TableClient } = require("@azure/data-tables");
 const { getEmail, isTeacher } = require("../checkMember");
-
+const { setJson, setErrorJson } = require("../contextHelper");
 
 const chatStorageAccountConnectionString = process.env.chatStorageAccountConnectionString;
 
@@ -12,12 +12,7 @@ module.exports = async function (context, req) {
 
     const teacherEmail = getEmail(req);
     if (!await isTeacher(teacherEmail, context)) {
-        context.res = {
-            status: 401,
-            headers: { 'Content-Type': 'application/json' },
-            body: "Unauthorized"
-        };
-        context.done();
+        setErrorJson(context, "Unauthorized", 401);
         return;
     }
 
@@ -53,7 +48,6 @@ module.exports = async function (context, req) {
         );
     }
 
-    const emails = entities.map(entity => entity.RowKey);
-
-    context.res.json({ message: "ok", emails });
+    const emails = entities.map(entity => entity.RowKey); 
+    setJson(context, emails);
 }

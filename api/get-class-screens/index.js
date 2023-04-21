@@ -1,6 +1,8 @@
 const { TableClient } = require("@azure/data-tables");
 const { BlobServiceClient, BlobSASPermissions, SASProtocol } = require("@azure/storage-blob");
 const { getEmail, isTeacher } = require("../checkMember");
+const { setJson, setErrorJson } = require("../contextHelper");
+
 
 const storageAccountConnectionString = process.env.chatStorageAccountConnectionString;
 
@@ -11,7 +13,6 @@ const containerClient = blobServiceClient.getContainerClient("screen");
 const chatStorageAccountConnectionString = process.env.chatStorageAccountConnectionString;
 
 const classesTableClient = TableClient.fromConnectionString(chatStorageAccountConnectionString, "classes");
-// const screensTableClient = TableClient.fromConnectionString(chatStorageAccountConnectionString, "screen");
 
 
 module.exports = async function (context, req) {
@@ -20,12 +21,7 @@ module.exports = async function (context, req) {
     await blockNonTeacherMember(teacherEmail, context);
 
     if (!await isTeacher(teacherEmail, context)) {
-        context.res = {
-            status: 401,
-            headers: { 'Content-Type': 'application/json' },
-            body: "Unauthorized"
-        };
-        context.done();
+        setErrorJson(context, "Unauthorized", 401);
         return;
     }
 
@@ -60,6 +56,5 @@ module.exports = async function (context, req) {
         context.log(sasUrl);
         return { email: studentEmail, sasUrl, name: entity.Name };
     }));
-
-    context.res.json(screens);
+    setJson(context, screens);
 }

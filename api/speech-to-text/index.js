@@ -1,6 +1,7 @@
 const { BlobServiceClient } = require("@azure/storage-blob");
 const { speechToText } = require("./speechToText");
 const { getEmail, isMember } = require("../checkMember");
+const { setJson, setErrorJson } = require("../contextHelper");
 const temp = require('temp');
 const fs = require('fs');
 
@@ -12,20 +13,12 @@ const blobServiceClient = BlobServiceClient.fromConnectionString(storageAccountC
 const containerClient = blobServiceClient.getContainerClient("voice");
 
 
-
 module.exports = async function (context, req) {
     const email = getEmail(req);
     if (!await isMember(email, context)) {
-        context.res = {
-            status: 401,
-            headers: { 'Content-Type': 'application/json' },
-            body: "Unauthorized",
-            'Content-Type': 'application/json'
-        };
-        context.done();
+        setErrorJson(context, "Unauthorized", 401);
         return;
     }
-
 
     const language = req.query.language;
 
@@ -42,16 +35,8 @@ module.exports = async function (context, req) {
         const res = await speechToText(ttsApiKey, speechRegion, tempName, language, context);
         context.log(res);
 
-        context.res = {
-            headers: { 'Content-Type': 'application/json' },
-            body: { DisplayText: res.privText }
-        };
-        context.done();
-
+        setJson(context, { DisplayText: res.privText });
     } catch (ex) {
-        context.log(ex);
-        context.res.json({
-            text: "error" + ex
-        });
+        setErrorJson(context, ex, 500);
     }
 }

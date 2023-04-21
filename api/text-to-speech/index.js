@@ -1,6 +1,7 @@
 const { BlobServiceClient } = require("@azure/storage-blob");
 const { textToSpeech } = require('./textToSpeech');
 const { getEmail, isMember } = require("../checkMember");
+const { setErrorJson } = require("../contextHelper");
 const temp = require('temp');
 const fs = require('fs');
 
@@ -15,13 +16,7 @@ module.exports = async function (context, req) {
     const email = getEmail(req);
 
     if (!await isMember(email, context)) {
-        context.res = {
-            status: 401,
-            headers: { 'Content-Type': 'application/json' },
-            body: "Unauthorized",
-            'Content-Type': 'application/json'
-        };
-        context.done();
+        setErrorJson(context, "Unauthorized", 401);
         return;
     }
 
@@ -44,5 +39,4 @@ module.exports = async function (context, req) {
         isRaw: true,
         body: fs.readFileSync(tempName)
     };
-    context.done();
 }

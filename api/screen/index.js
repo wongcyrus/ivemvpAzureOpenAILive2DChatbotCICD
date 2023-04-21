@@ -1,5 +1,6 @@
 const { BlobServiceClient } = require("@azure/storage-blob");
 const { getEmail, isMember, isValidSession } = require("../checkMember");
+const { setJson, setErrorJson } = require("../contextHelper");
 
 const storageAccountConnectionString = process.env.chatStorageAccountConnectionString;
 
@@ -21,22 +22,11 @@ module.exports = async function (context, req) {
     const email = getEmail(req);
 
     if (!await isMember(email, context)) {
-        context.res = {
-            status: 401,
-            headers: { 'Content-Type': 'application/json' },
-            body: "Unauthorized"
-        };
-        context.done();
+        setErrorJson(context, "Unauthorized");
         return;
     }
-
     if (!await isValidSession(email, context)) {
-        context.res = {
-            status: 401,
-            headers: { 'Content-Type': 'application/json' },
-            body: "Screen Sharing Session Expired!"
-        };
-        context.done();
+        setErrorJson(context, "Screen Sharing Session Expired!");
         return;
     }
 
@@ -47,6 +37,12 @@ module.exports = async function (context, req) {
         const data = matches[2];
         const bodyBuffer = new Uint8Array(Buffer.from(data, 'base64'));
 
+        const sizeInMB = bodyBuffer.length / 1_048_576;
+        if (sizeInMB > 0.5) {
+            setErrorJson(context, "File size is too large. Max 0.5 MB", 403);
+            return;
+        }
+
         const blobName = email.replace(/[^a-zA-Z0-9 ]/g, '_') + "." + ext;
         const blockBlobClient = containerClient.getBlockBlobClient(blobName);
         const uploadBlobResponse = await blockBlobClient.uploadData(bodyBuffer);
@@ -56,16 +52,8 @@ module.exports = async function (context, req) {
         const destinationBlobClient = await containerClient.getBlobClient(timeBlobName);
         await destinationBlobClient.beginCopyFromURL(blockBlobClient.url);
 
-        context.res = {
-            headers: { 'Content-Type': 'application/json' },
-            body: { DisplayText: blobName, timeBlobName }
-        };
-        context.done();
-
+        setJson(context, { DisplayText: blobName, timeBlobName });
     } catch (ex) {
-        context.log(ex);
-        context.res.json({
-            text: "error" + ex
-        });
+        setErrorJson(context, ex);
     }
 }

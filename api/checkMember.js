@@ -73,7 +73,7 @@ async function isValidSession(email, context) {
     let pageEntities = undefined;
     let entities = [];
     const sessionEndtime = new Date();
-    sessionEndtime.setHours(sessionEndtime.getHours() - 3);
+    sessionEndtime.setHours(sessionEndtime.getHours() + 3);
     do {
         const page = await sessionsTableClient.listEntities({
             queryOptions: {
@@ -87,7 +87,6 @@ async function isValidSession(email, context) {
     while (continuationToken !== undefined);
 
     return entities.length > 0;
-
 }
 
 

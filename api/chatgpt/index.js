@@ -1,6 +1,8 @@
 const axios = require('axios');
 const { TableClient } = require("@azure/data-tables");
 const { getEmail, isMember, todayUsage, isOverLimit, getUsageLimit } = require("../checkMember");
+const { setJson, setErrorJson } = require("../contextHelper");
+
 const { calculateCost } = require("./price");
 
 
@@ -14,19 +16,14 @@ module.exports = async function (context, req) {
     const email = getEmail(req);
 
     if (!await isMember(email, context)) {
-        context.res = {
-            status: 401,
-            headers: { 'Content-Type': 'application/json' },
-            body: "Unauthorized"
-        };
-        context.done();
+        setErrorJson(context, "Unauthorized");
         return;
     }
 
     const limit = await getUsageLimit(email);
     const tokenUsageCost = await todayUsage(email);
     if (isOverLimit(email, tokenUsageCost, limit, context)) {
-        context.res.json({
+        setJson(context, {
             "choices": [
                 {
                     "text": "Used up your daily limit. Please try again tomorrow.",
@@ -34,24 +31,21 @@ module.exports = async function (context, req) {
             ]
         });
     }
-
-    context.log("Chat");
+  
     let body = { ...req.body };
     const model = body.model;
     delete body.model;
     if (!process.env.openAiCognitiveDeploymentNames.split(",").find(element => model == element)) {
-        context.res.json({
+        setErrorJson(context, {
             "choices": [
                 {
                     "text": "Invalid model name!",
                 }
             ]
-        });
+        }, 429);
     }
 
     try {
-
-
         let openaiurl;
         if (model.startsWith('gpt-')) {
             const apiVersion = "2023-03-15-preview";
@@ -109,12 +103,11 @@ module.exports = async function (context, req) {
         let response = { ...res.data };
         response['cost'] = cost;
         response['left'] = limit - (tokenUsageCost + cost);
-        context.res.json(response);
+
+        setJson(context, response);
 
     } catch (ex) {
         context.log(ex);
-        context.res.json({
-            text: "" + ex
-        });
+        setErrorJson(context, ex);
     }
 }
