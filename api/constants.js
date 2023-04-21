@@ -1,4 +1,4 @@
-const screenSharingRate = 5;
+const screenSharingRate = 1;
 const screenSharingMaxSize = 0.5;
 const screenSharingMaxDuration = 3;
 const screenSharingMaxCost = 0.3;

@@ -1,7 +1,7 @@
 const { BlobServiceClient } = require("@azure/storage-blob");
 const { getEmail, isMember, isValidSession } = require("../checkMember");
 const { setJson, setErrorJson } = require("../contextHelper");
-const { screenSharingMaxSize } = require("../constants");
+const { screenSharingMaxSize, screenSharingRate } = require("../constants");
 
 const storageAccountConnectionString = process.env.chatStorageAccountConnectionString;
 
@@ -17,6 +17,23 @@ function getDateTimeStringAsFilename() {
     const minute = now.getMinutes();
     const second = now.getSeconds();
     return `${year}-${month}-${day}-${hour}-${minute}-${second}`;
+}
+async function IsOverRateLimit(containerClient, prefix) {
+    // page size - artificially low as example
+    const maxPageSize = 60 / screenSharingRate + 10;
+    const listOptions = {
+        includeMetadata: false,
+        includeSnapshots: false,
+        includeTags: false,
+        includeVersions: false,
+        prefix
+    };
+
+    let iterator = containerClient.listBlobsFlat(listOptions).byPage({ maxPageSize });
+    let response = (await iterator.next()).value;
+
+    let count = response.segment.blobItems;
+    return count > 60 / screenSharingRate;
 }
 
 module.exports = async function (context, req) {
@@ -41,6 +58,10 @@ module.exports = async function (context, req) {
         const sizeInMB = bodyBuffer.length / 1_048_576;
         if (sizeInMB > screenSharingMaxSize) {
             setErrorJson(context, `File size is too large. Max ${screenSharingMaxSize} MB`, 403);
+            return;
+        }
+        if(await IsOverRateLimit(containerClient, email + "/" + getDateTimeStringAsFilename()){
+            setErrorJson(context, `Rate limit exceeded. Max ${screenSharingRate} per minute`, 403);
             return;
         }
 
