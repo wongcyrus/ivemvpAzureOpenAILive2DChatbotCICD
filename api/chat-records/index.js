@@ -13,7 +13,7 @@ module.exports = async function (context, req) {
         return;
     }
 
-    const studentEmail = req.query.studentEmail;
+    const studentEmail = req.query.email;
     const start = req.query.start;
     const end = req.query.end;
 
