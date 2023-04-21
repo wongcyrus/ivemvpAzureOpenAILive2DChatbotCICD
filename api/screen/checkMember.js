@@ -11,21 +11,17 @@ const getEmail = (req) => {
     const clientPrincipal = JSON.parse(decoded);
     return clientPrincipal.userDetails;
 }
-const blockNonMember = async (email, context) => {
+const isMember = async (email, context) => {
     try {
         const user = await usersTableClient.getEntity(email, email);
         context.log(user);
         return user.partitionKey ? true : false;
     } catch (__) {
-        context.res = {
-            status: 401,
-            headers: { 'Content-Type': 'application/json' },
-            body: "Unauthorized"
-        };
-        context.done();
+        return false;
     }
 }
-async function blockInvalidSession(email, context) {
+
+async function isValidSession(email, context) {
     let continuationToken = null;
     let pageEntities = undefined;
     let entities = [];
@@ -43,18 +39,12 @@ async function blockInvalidSession(email, context) {
     }
     while (continuationToken !== undefined);
 
-    if (entities.length === 0) {
-        context.res = {
-            status: 401,
-            headers: { 'Content-Type': 'application/json' },
-            body: "Screen Sharing Session Expired!"
-        };
-        context.done();
-    }
+    return entities.length > 0;
+
 }
 
 module.exports = {
     getEmail,
-    blockNonMember,
-    blockInvalidSession
+    isMember,
+    isValidSession
 };

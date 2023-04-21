@@ -1,6 +1,6 @@
 const { TableClient } = require("@azure/data-tables");
 const { BlobServiceClient, BlobSASPermissions, SASProtocol } = require("@azure/storage-blob");
-const { getEmail, blockNonTeacherMember } = require("./checkMember");
+const { getEmail, isTeacher } = require("./checkMember");
 
 const storageAccountConnectionString = process.env.chatStorageAccountConnectionString;
 
@@ -16,11 +16,18 @@ const classesTableClient = TableClient.fromConnectionString(chatStorageAccountCo
 
 module.exports = async function (context, req) {
 
-    const email = getEmail(req);
-    await blockNonTeacherMember(email, context);
-
     const teacherEmail = getEmail(req);
     await blockNonTeacherMember(teacherEmail, context);
+
+    if (!await isTeacher(teacherEmail, context)) {
+        context.res = {
+            status: 401,
+            headers: { 'Content-Type': 'application/json' },
+            body: "Unauthorized"
+        };
+        context.done();
+        return;
+    }
 
     const classId = req.query.classId;
 
@@ -51,7 +58,7 @@ module.exports = async function (context, req) {
             expiresOn: new Date(new Date().valueOf() + (1 * 60 * 1000))
         });
         context.log(sasUrl);
-        return { email: studentEmail, sasUrl, name: entity.Name};
+        return { email: studentEmail, sasUrl, name: entity.Name };
     }));
 
     context.res.json(screens);

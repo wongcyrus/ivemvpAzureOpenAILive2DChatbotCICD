@@ -11,22 +11,18 @@ const getEmail = (req) => {
     return clientPrincipal.userDetails;
 }
 
-const blockNonTeacherMember = async (email, context) => {
+const isTeacher = async (email, context) => {
     try {
         const user = await usersTableClient.getEntity(email, email);
         context.log(user);
         return user.partitionKey ? true : false && user.Role === "teacher";
     } catch (__) {
-        context.res = {
-            status: 401,
-            headers: { 'Content-Type': 'application/json' },
-            body: "Unauthorized"
-        };
-        context.done();
+        return false;
     }
 }
 
+
 module.exports = {
     getEmail,
-    blockNonTeacherMember,
+    isTeacher,
 };

@@ -1,6 +1,6 @@
 const { BlobServiceClient } = require("@azure/storage-blob");
 const { textToSpeech } = require('./textToSpeech');
-const { getEmail, blockNonMember } = require("./checkMember");
+const { getEmail, isMember } = require("./checkMember");
 const temp = require('temp');
 const fs = require('fs');
 
@@ -13,7 +13,17 @@ const containerClient = blobServiceClient.getContainerClient("voice");
 
 module.exports = async function (context, req) {
     const email = getEmail(req);
-    await blockNonMember(email, context);
+
+    if (!await isMember(email, context)) {
+        context.res = {
+            status: 401,
+            headers: { 'Content-Type': 'application/json' },
+            body: "Unauthorized",
+            'Content-Type': 'application/json'
+        };
+        context.done();
+        return;
+    }
 
     let body = req.body;
     context.log(body);

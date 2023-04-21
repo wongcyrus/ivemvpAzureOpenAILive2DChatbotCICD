@@ -1,5 +1,5 @@
 const { BlobServiceClient } = require("@azure/storage-blob");
-const { getEmail, blockNonMember, blockInvalidSession } = require("./checkMember");
+const { getEmail, isMember, isValidSession } = require("./checkMember");
 
 const storageAccountConnectionString = process.env.chatStorageAccountConnectionString;
 
@@ -19,8 +19,26 @@ function getDateTimeStringAsFilename() {
 
 module.exports = async function (context, req) {
     const email = getEmail(req);
-    await blockNonMember(email, context);
-    await blockInvalidSession(email, context);
+
+    if (!await isMember(email, context)) {
+        context.res = {
+            status: 401,
+            headers: { 'Content-Type': 'application/json' },
+            body: "Unauthorized"
+        };
+        context.done();
+        return;
+    }
+
+    if (await isValidSession(email, context)) {
+        context.res = {
+            status: 401,
+            headers: { 'Content-Type': 'application/json' },
+            body: "Screen Sharing Session Expired!"
+        };
+        context.done();
+        return;
+    }
 
     try {
         const regex = /^data:.+\/(.+);base64,(.*)$/;

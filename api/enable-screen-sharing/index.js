@@ -1,5 +1,5 @@
 const { TableClient } = require("@azure/data-tables");
-const { getEmail, blockNonTeacherMember } = require("./checkMember");
+const { getEmail, isTeacher } = require("./checkMember");
 
 
 const chatStorageAccountConnectionString = process.env.chatStorageAccountConnectionString;
@@ -11,7 +11,15 @@ const sessionsTableClient = TableClient.fromConnectionString(chatStorageAccountC
 module.exports = async function (context, req) {
 
     const teacherEmail = getEmail(req);
-    await blockNonTeacherMember(teacherEmail, context);
+    if (!await isTeacher(teacherEmail, context)) {
+        context.res = {
+            status: 401,
+            headers: { 'Content-Type': 'application/json' },
+            body: "Unauthorized"
+        };
+        context.done();
+        return;
+    }
 
     const classId = req.query.classId;
 

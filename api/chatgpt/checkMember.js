@@ -12,18 +12,13 @@ const getEmail = (req) => {
     return clientPrincipal.userDetails;
 }
 
-const blockNonMember = async (email, context) => {
+const isMember = async (email, context) => {
     try {
         const user = await usersTableClient.getEntity(email, email);
         context.log(user);
         return user.partitionKey ? true : false;
     } catch (__) {
-        context.res = {
-            status: 401,
-            headers: { 'Content-Type': 'application/json' },
-            body: "Unauthorized"
-        };
-        context.done();
+        return false;
     }
 }
 
@@ -65,7 +60,7 @@ async function todayUsage(email) {
 
 module.exports = {
     getEmail,
-    blockNonMember,
+    isMember,
     isOverLimit,
     todayUsage,
     getUsageLimit

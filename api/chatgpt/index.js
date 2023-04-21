@@ -1,6 +1,6 @@
 const axios = require('axios');
 const { TableClient } = require("@azure/data-tables");
-const { getEmail, blockNonMember, todayUsage, isOverLimit, getUsageLimit } = require("./checkMember");
+const { getEmail, isMember, todayUsage, isOverLimit, getUsageLimit } = require("./checkMember");
 const { calculateCost } = require("./price");
 
 
@@ -12,7 +12,16 @@ const chatHistoryTableClient = TableClient.fromConnectionString(chatStorageAccou
 module.exports = async function (context, req) {
 
     const email = getEmail(req);
-    await blockNonMember(email, context);
+
+    if (!await isMember(email, context)) {
+        context.res = {
+            status: 401,
+            headers: { 'Content-Type': 'application/json' },
+            body: "Unauthorized"
+        };
+        context.done();
+        return;
+    }
 
     const limit = await getUsageLimit(email);
     const tokenUsageCost = await todayUsage(email);
@@ -27,7 +36,7 @@ module.exports = async function (context, req) {
     }
 
     context.log("Chat");
-    let body = { ...req.body };    
+    let body = { ...req.body };
     const model = body.model;
     delete body.model;
     if (!process.env.openAiCognitiveDeploymentNames.split(",").find(element => model == element)) {
