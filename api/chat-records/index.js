@@ -23,7 +23,7 @@ module.exports = async function (context, req) {
     do {
         const page = await chatHistoryTableClient.listEntities({
             queryOptions: {
-                filter: `PartitionKey eq '${studentEmail}' and Timestamp le datetime'${end} and Timestamp ge datetime'${start}'`
+                filter: `PartitionKey eq '${studentEmail}' and Timestamp le datetime'${end}' and Timestamp ge datetime'${start}'`
             }
         }).byPage({ maxPageSize: 100, continuationToken: continuationToken }).next();
         pageEntities = page.value;
