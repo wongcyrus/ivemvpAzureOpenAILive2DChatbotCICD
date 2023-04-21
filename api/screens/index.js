@@ -18,9 +18,10 @@ function getDateTimeStringAsFilename() {
     const second = now.getSeconds();
     return `${year}-${month}-${day}-${hour}-${minute}-${second}`;
 }
-async function IsOverRateLimit(containerClient, prefix) {
+async function IsOverRateLimit(containerClient, prefix,context) {
     // page size - artificially low as example
     const maxPageSize = 60 / screenSharingRate + 10;
+    context.log(maxPageSize);
     const listOptions = {
         includeMetadata: false,
         includeSnapshots: false,
@@ -32,7 +33,9 @@ async function IsOverRateLimit(containerClient, prefix) {
     let iterator = containerClient.listBlobsFlat(listOptions).byPage({ maxPageSize });
     let response = (await iterator.next()).value;
 
-    let count = response.segment.blobItems;
+    let count = response.segment.blobItems.length;
+    context.log(count);
+    context.log(screenSharingRate);
     return count > screenSharingRate;
 }
 
@@ -63,7 +66,7 @@ module.exports = async function (context, req) {
 
         let prefix = email + "/" + getDateTimeStringAsFilename();
         prefix = prefix.substring(0, prefix.lastIndexOf("-"));
-        if (await IsOverRateLimit(containerClient, prefix)) {
+        if (await IsOverRateLimit(containerClient, prefix, context)) {
             setErrorJson(context, `Rate limit exceeded. Max ${screenSharingRate} per minute`, 403);
             return;
         }
