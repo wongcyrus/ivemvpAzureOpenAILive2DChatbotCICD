@@ -33,7 +33,7 @@ async function IsOverRateLimit(containerClient, prefix) {
     let response = (await iterator.next()).value;
 
     let count = response.segment.blobItems;
-    return count > (60 / screenSharingRate);
+    return count > screenSharingRate;
 }
 
 module.exports = async function (context, req) {
@@ -60,7 +60,7 @@ module.exports = async function (context, req) {
             setErrorJson(context, `File size is too large. Max ${screenSharingMaxSize} MB`, 403);
             return;
         }
-        
+
         let prefix = email + "/" + getDateTimeStringAsFilename();
         prefix = prefix.substring(0, prefix.lastIndexOf("-"));
         if (await IsOverRateLimit(containerClient, prefix)) {
