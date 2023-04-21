@@ -1,6 +1,7 @@
 const { BlobServiceClient } = require("@azure/storage-blob");
 const { getEmail, isMember, isValidSession } = require("../checkMember");
 const { setJson, setErrorJson } = require("../contextHelper");
+const { screenSharingMaxSize } = require("../constants");
 
 const storageAccountConnectionString = process.env.chatStorageAccountConnectionString;
 
@@ -38,8 +39,8 @@ module.exports = async function (context, req) {
         const bodyBuffer = new Uint8Array(Buffer.from(data, 'base64'));
 
         const sizeInMB = bodyBuffer.length / 1_048_576;
-        if (sizeInMB > 0.5) {
-            setErrorJson(context, "File size is too large. Max 0.5 MB", 403);
+        if (sizeInMB > screenSharingMaxSize) {
+            setErrorJson(context, `File size is too large. Max ${screenSharingMaxSize} MB`, 403);
             return;
         }
 

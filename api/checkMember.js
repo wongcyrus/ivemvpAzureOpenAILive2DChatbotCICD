@@ -1,4 +1,5 @@
 const { TableClient } = require("@azure/data-tables");
+const { screenSharingMaxCost, screenSharingMaxDuration } = require("./constants");
 
 const chatStorageAccountConnectionString = process.env.chatStorageAccountConnectionString;
 const usersTableClient = TableClient.fromConnectionString(chatStorageAccountConnectionString, "users");
@@ -33,14 +34,14 @@ const isTeacher = async (email, context) => {
     }
 }
 
-const isOverLimit = (email, tokenUsageCost, limit, context) => {    
+const isOverLimit = (email, tokenUsageCost, limit, context) => {
     context.log(email + " used " + tokenUsageCost + " tokens today.");
     return tokenUsageCost > limit;
 };
 
 async function getUsageLimit(email) {
     const user = await usersTableClient.getEntity(email, email);
-    const limit = user.Limit ?? 0.3;
+    const limit = user.Limit ?? screenSharingMaxCost;
     return limit;
 }
 
@@ -73,7 +74,7 @@ async function isValidSession(email, context) {
     let pageEntities = undefined;
     let entities = [];
     const sessionEndtime = new Date();
-    sessionEndtime.setHours(sessionEndtime.getHours() + 3);
+    sessionEndtime.setHours(sessionEndtime.getHours() + screenSharingMaxDuration);
     do {
         const page = await sessionsTableClient.listEntities({
             queryOptions: {
