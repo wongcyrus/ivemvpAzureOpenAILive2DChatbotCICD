@@ -1,5 +1,5 @@
 const { BlobServiceClient } = require("@azure/storage-blob");
-const { getEmail, isMember, isValidSession } = require("./checkMember");
+const { getEmail, isMember, isValidSession } = require("../checkMember");
 
 const storageAccountConnectionString = process.env.chatStorageAccountConnectionString;
 
@@ -30,7 +30,7 @@ module.exports = async function (context, req) {
         return;
     }
 
-    if (await isValidSession(email, context)) {
+    if (!await isValidSession(email, context)) {
         context.res = {
             status: 401,
             headers: { 'Content-Type': 'application/json' },

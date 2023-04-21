@@ -1,5 +1,5 @@
 const { TableClient } = require("@azure/data-tables");
-const { getEmail, isTeacher } = require("./checkMember");
+const { getEmail, isTeacher } = require("../checkMember");
 
 
 const chatStorageAccountConnectionString = process.env.chatStorageAccountConnectionString;

@@ -1,6 +1,6 @@
 const axios = require('axios');
 const { TableClient } = require("@azure/data-tables");
-const { getEmail, isMember, todayUsage, isOverLimit, getUsageLimit } = require("./checkMember");
+const { getEmail, isMember, todayUsage, isOverLimit, getUsageLimit } = require("../checkMember");
 const { calculateCost } = require("./price");
 
 

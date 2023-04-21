@@ -1,6 +1,6 @@
 const { TableClient } = require("@azure/data-tables");
 const { BlobServiceClient, BlobSASPermissions, SASProtocol } = require("@azure/storage-blob");
-const { getEmail, isTeacher } = require("./checkMember");
+const { getEmail, isTeacher } = require("../checkMember");
 
 const storageAccountConnectionString = process.env.chatStorageAccountConnectionString;
 

@@ -1,6 +1,6 @@
 const { BlobServiceClient } = require("@azure/storage-blob");
 const { speechToText } = require("./speechToText");
-const { getEmail, isMember } = require("./checkMember");
+const { getEmail, isMember } = require("../checkMember");
 const temp = require('temp');
 const fs = require('fs');
 
