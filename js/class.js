@@ -73,7 +73,7 @@ $(document).ready(async () => {
         }
     });
 
-    $(".studentScreen").on("click", async (evt) => {
+    $('body').on('click', 'a.studentScreen', ()=> {
         evt.preventDefault();
         const sasUrl = $(evt.target).attr("href");
         console.log(url);
