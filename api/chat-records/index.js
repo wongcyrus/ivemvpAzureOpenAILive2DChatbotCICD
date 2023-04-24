@@ -2,8 +2,8 @@ const { TableClient } = require("@azure/data-tables");
 const { getEmail, isTeacher } = require("../checkMember");
 const { setJson, setErrorJson } = require("../contextHelper");
 
-const storageAccountConnectionString = process.env.chatStorageAccountConnectionString;
-const chatHistoryTableClient = TableClient.fromConnectionString(storageAccountConnectionString, "chatHistory");
+const chatStorageAccountConnectionString = process.env.chatStorageAccountConnectionString;
+const chatHistoryTableClient = TableClient.fromConnectionString(chatStorageAccountConnectionString, "chatHistory");
 
 module.exports = async function (context, req) {
     const teacherEmail = getEmail(req);

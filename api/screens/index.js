@@ -3,9 +3,9 @@ const { getEmail, isMember, isValidSession } = require("../checkMember");
 const { setJson, setErrorJson } = require("../contextHelper");
 const { screenSharingMaxSize, screenSharingPerMinute } = require("../constants");
 
-const storageAccountConnectionString = process.env.chatStorageAccountConnectionString;
+const chatStorageAccountConnectionString = process.env.chatStorageAccountConnectionString;
 
-const blobServiceClient = BlobServiceClient.fromConnectionString(storageAccountConnectionString);
+const blobServiceClient = BlobServiceClient.fromConnectionString(chatStorageAccountConnectionString);
 const containerClient = blobServiceClient.getContainerClient("screen");
 
 function getDateTimeStringAsFilename() {

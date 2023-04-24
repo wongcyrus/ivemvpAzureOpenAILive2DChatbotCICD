@@ -7,9 +7,9 @@ const fs = require('fs');
 
 const speechRegion = process.env.speechRegion;
 const ttsApiKey = process.env.ttsApiKey;
-const storageAccountConnectionString = process.env.chatStorageAccountConnectionString;
+const chatStorageAccountConnectionString = process.env.chatStorageAccountConnectionString;
 
-const blobServiceClient = BlobServiceClient.fromConnectionString(storageAccountConnectionString);
+const blobServiceClient = BlobServiceClient.fromConnectionString(chatStorageAccountConnectionString);
 const containerClient = blobServiceClient.getContainerClient("voice");
 
 module.exports = async function (context, req) {

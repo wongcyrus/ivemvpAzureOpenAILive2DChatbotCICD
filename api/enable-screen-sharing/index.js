@@ -8,7 +8,7 @@ const chatStorageAccountConnectionString = process.env.chatStorageAccountConnect
 const classesTableClient = TableClient.fromConnectionString(chatStorageAccountConnectionString, "classes");
 const sessionsTableClient = TableClient.fromConnectionString(chatStorageAccountConnectionString, "sessions");
 
-const blobServiceClient = BlobServiceClient.fromConnectionString(storageAccountConnectionString);
+const blobServiceClient = BlobServiceClient.fromConnectionString(chatStorageAccountConnectionString);
 const containerClient = blobServiceClient.getContainerClient("screen");
 
 

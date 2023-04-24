@@ -4,14 +4,10 @@ const { getEmail, isTeacher } = require("../checkMember");
 const { setJson, setErrorJson } = require("../contextHelper");
 
 
-const storageAccountConnectionString = process.env.chatStorageAccountConnectionString;
-
-const blobServiceClient = BlobServiceClient.fromConnectionString(storageAccountConnectionString);
-const containerClient = blobServiceClient.getContainerClient("screen");
-
-
 const chatStorageAccountConnectionString = process.env.chatStorageAccountConnectionString;
 
+const blobServiceClient = BlobServiceClient.fromConnectionString(chatStorageAccountConnectionString);
+const containerClient = blobServiceClient.getContainerClient("screen");
 const classesTableClient = TableClient.fromConnectionString(chatStorageAccountConnectionString, "classes");
 
 
