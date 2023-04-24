@@ -51,12 +51,17 @@
 Comments the following conversations between User and AI in 100 words:
 ###conversations###
 Give a mark from 1-10 for the effectiveness of those conversations.
+Return JSON in following format:
+{
+"mark": 1,
+"comments": ""
+}                                                                    
                                 </textarea>
                             </div>
                         </div>
                         <div class="col">
                             <div class="form-group">
-                                <label for="ResponseTextarea">Response</label>
+                                <label for="ResponseTextarea">Response <span class="badge badge-light" id="mark"></span></label>
                                 <textarea class="form-control" id="ResponseTextarea" rows="3"></textarea>
                             </div>
                         </div>

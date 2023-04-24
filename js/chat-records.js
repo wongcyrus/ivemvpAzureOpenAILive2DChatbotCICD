@@ -1,4 +1,5 @@
 let currentChatRecord;
+let mark;
 $(document).ready(async () => {
     async function getUser() {
         const response = await fetch('/.auth/me');
@@ -89,8 +90,15 @@ $(document).ready(async () => {
             body: JSON.stringify(m)
         });
         const json = await response.json();
+        mark = json;
         console.log(json);
         const answer = json.choices[0].message.content;
-        $("#ResponseTextarea").html(answer);
+
+        if (answer.comment) {
+            $("#mark").html(json.mark);
+            $("#ResponseTextarea").html(answer.comment);
+        } else {
+            $("#ResponseTextarea").html(answer);
+        }
     });
 });
