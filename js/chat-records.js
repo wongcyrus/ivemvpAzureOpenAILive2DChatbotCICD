@@ -20,6 +20,27 @@ $(document).ready(async () => {
         $(".nonmember").show();
     }
 
+    function getUrlVars() {
+        var vars = [], hash;
+        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+        for (var i = 0; i < hashes.length; i++) {
+            hash = hashes[i].split('=');
+            vars.push(hash[0]);
+            vars[hash[0]] = hash[1];
+        }
+        return vars;
+    }
+    const parameters = getUrlVars();
+    if (parameters["email"]) {
+        $("#email").val(parameters["email"]);
+    }
+    if (parameters["start"]) {
+        $("#start").val(parameters["start"]);
+    }
+    if (parameters["end"]) {
+        $("#end").val(parameters["end"]);
+    }
+
 
     const tableBody = $("#table-body");
     $("#email-submit").on("click", async (evt) => {
@@ -93,10 +114,12 @@ $(document).ready(async () => {
         mark = json;
         console.log(json);
         const answer = json.choices[0].message.content;
+        $("#ResponseTextarea").html(answer);
 
-        if (answer.comment) {
-            $("#mark").html(json.mark);
-            $("#ResponseTextarea").html(answer.comment);
+        const marked = JSON.parse(answer);
+        if (marked.comments) {
+            $("#mark").html(marked.marks + " marks");
+            $("#ResponseTextarea").html(marked.comments);
         } else {
             $("#ResponseTextarea").html(answer);
         }
