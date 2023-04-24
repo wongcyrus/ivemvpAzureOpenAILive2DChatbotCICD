@@ -80,7 +80,7 @@ $(document).ready(async () => {
         };
 
         const response = await fetch(`/api/chatgpt/`, {
-            method: "PUT",
+            method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
