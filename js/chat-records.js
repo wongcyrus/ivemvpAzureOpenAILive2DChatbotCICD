@@ -1,3 +1,4 @@
+let currentChatRecord;
 $(document).ready(async () => {
     async function getUser() {
         const response = await fetch('/.auth/me');
@@ -18,7 +19,7 @@ $(document).ready(async () => {
         $(".nonmember").show();
     }
 
-    let currentChatRecord;
+
     const tableBody = $("#table-body");
     $("#email-submit").on("click", async (evt) => {
         evt.preventDefault();
@@ -63,9 +64,7 @@ $(document).ready(async () => {
             acc += "User: " + chat.User + "\n";
             acc += "AI: " + chat.Chatbot + "\n";
         }, "");
-
         const text = prompt.replace("###conversations###", convertsions);
-
         const systemMessage = { "role": "system", "content": "You are a helpful assistant." };
         const messages = [systemMessage,
             { "role": "user", "content": text }
@@ -76,6 +75,8 @@ $(document).ready(async () => {
             "max_tokens": 800,
             "temperature": 0.7,
             "top_p": 0.95,
+            "frequency_penalty": 0,
+            "presence_penalty": 0,
             "stop": ["<|im_end|>"]
         };
 
