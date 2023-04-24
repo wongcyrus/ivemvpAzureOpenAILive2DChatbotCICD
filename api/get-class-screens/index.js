@@ -40,7 +40,7 @@ module.exports = async function (context, req) {
     }
     while (continuationToken !== undefined);
 
-    const screens = await Promise.all(entities.map(async entity => {
+    let screens = await Promise.all(entities.map(async entity => {
         const studentEmail = entity.rowKey;
         context.log(studentEmail);
         const blobName = studentEmail.replace(/[^a-zA-Z0-9 ]/g, '_') + ".jpeg";
@@ -54,5 +54,7 @@ module.exports = async function (context, req) {
         context.log(sasUrl);
         return { email: studentEmail, sasUrl, name: entity.Name };
     }));
+
+    screens = screens.sort((p1, p2) => p1.name.localeCompare(p2.name));
     setJson(context, screens);
 }
