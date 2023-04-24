@@ -49,7 +49,7 @@ $(document).ready(async () => {
             const img = $(`
             <div class="col-sm-6 col-md-4 mb-3">
                 <h6>${name}</h6>
-                <a href="${sasUrl}" target="_blank" rel="noopener noreferrer"><img src="${sasUrl}" alt="${email}" class="fluid img-thumbnail"/><a/>                
+                <a href="${sasUrl}" target="_blank" rel="noopener noreferrer" class="studentScreen"><img src="${sasUrl}" alt="${email}" class="fluid img-thumbnail"/><a/>                
             </div>`);
             screens.append(img);
         });
@@ -73,4 +73,11 @@ $(document).ready(async () => {
         }
     });
 
+    $(".studentScreen").on("click", async (evt) => {
+        evt.preventDefault();
+        const sasUrl = $(evt.target).attr("href");
+        console.log(url);
+        $('#modal-body').html(`<img src="${sasUrl}" alt="${email}" class="fluid img-thumbnail"/>`);
+        $('#screenModal').modal('show');
+    });
 });
