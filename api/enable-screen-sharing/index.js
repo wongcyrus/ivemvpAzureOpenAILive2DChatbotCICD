@@ -52,7 +52,7 @@ module.exports = async function (context, req) {
         );
     }
 
-    const emails = entities.map(entity => entity.RowKey);
+    const emails = entities.map(entity => entity.rowKey);
 
     //delete cached screens
     await Promise.all(emails.map(async studentEmail => {
