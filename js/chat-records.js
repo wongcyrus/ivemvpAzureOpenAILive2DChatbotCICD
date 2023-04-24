@@ -70,7 +70,7 @@ $(document).ready(async () => {
             { "role": "user", "content": text }
         ];
         const m = {
-            "model": "gtp-4",
+            "model": "gpt-4",
             "prompt": messages,
             "max_tokens": 800,
             "temperature": 0.7,
