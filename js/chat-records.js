@@ -63,6 +63,7 @@ $(document).ready(async () => {
         const convertsions = currentChatRecord.reduce((acc, chat) => {
             acc += "User: " + chat.User + "\n";
             acc += "AI: " + chat.Chatbot + "\n";
+            return acc;
         }, "");
         const text = prompt.replace("###conversations###", convertsions);
         const systemMessage = { "role": "system", "content": "You are a helpful assistant." };
@@ -90,6 +91,6 @@ $(document).ready(async () => {
         const json = await response.json();
         console.log(json);
         const answer = json.choices[0].message.content;
-        $("#ResponseTextarea").htl(answer);
+        $("#ResponseTextarea").html(answer);
     });
 });
