@@ -61,5 +61,6 @@ module.exports = async function (context, req) {
         await blobClient.deleteIfExists();
     }));
 
-    setJson(context, emails);
+    const results = entities.map(entity => ({ email: entity.rowKey, name: entity.Name }));
+    setJson(context, results);
 }

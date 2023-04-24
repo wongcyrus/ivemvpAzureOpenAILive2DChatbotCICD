@@ -55,4 +55,40 @@ $(document).ready(async () => {
             rowCount++;
         });
     });
+
+    $("#comment-submit").on("click", async (evt) => {
+        evt.preventDefault();
+        const prompt = $("#PromptTextarea").val();
+        const convertsions = currentChatRecord.reduce((acc, chat) => {
+            acc += "User: " + chat.User + "\n";
+            acc += "AI: " + chat.Chatbot + "\n";
+        }, "");
+
+        const text = prompt.replace("###conversations###", convertsions);
+
+        const systemMessage = { "role": "system", "content": "You are a helpful assistant." };
+        const messages = [systemMessage,
+            { "role": "user", "content": text }
+        ];
+        const m = {
+            "model": "gtp-4",
+            "prompt": messages,
+            "max_tokens": 800,
+            "temperature": 0.7,
+            "top_p": 0.95,
+            "stop": ["<|im_end|>"]
+        };
+
+        const response = await fetch(`/api/chatgpt/`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(m)
+        });
+        const json = await response.json();
+        console.log(json);
+        const answer = json.choices[0].message.content;
+        $("#ResponseTextarea").htl(answer);
+    });
 });

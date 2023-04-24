@@ -37,12 +37,31 @@
                             <label for="end" class="col-form-label">End:</label>
                             <input type="datetime-local" id="end" name="end" min="2023-01-01T00:00"
                                 max="2033-01-01T00:00" class="form-control">
-                        </div>     
+                        </div>
                         <div class=" col">
                             <button type="submit" class="btn btn-primary" id="email-submit">Load</button>
                         </div>
-
                     </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="PromptTextarea">Prompt: ###conversations###</label>
+                                <button type="submit" class="btn btn-primary" id="comment-submit">Send</button>
+                                <textarea class="form-control" id="PromptTextarea" rows="3">
+Comments the following converstions between User and AI in 100 words:
+###conversations###
+Give a mark from 1-10 for the effectiveness of this converstion.
+                                </textarea>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="ResponseTextarea">Response</label>
+                                <textarea class="form-control" id="ResponseTextarea" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
                 </form>
             </div>
         </div>
