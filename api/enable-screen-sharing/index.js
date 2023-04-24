@@ -1,4 +1,5 @@
 const { TableClient } = require("@azure/data-tables");
+const { BlobServiceClient } = require("@azure/storage-blob");
 const { getEmail, isTeacher } = require("../checkMember");
 const { setJson, setErrorJson } = require("../contextHelper");
 
@@ -6,6 +7,9 @@ const chatStorageAccountConnectionString = process.env.chatStorageAccountConnect
 
 const classesTableClient = TableClient.fromConnectionString(chatStorageAccountConnectionString, "classes");
 const sessionsTableClient = TableClient.fromConnectionString(chatStorageAccountConnectionString, "sessions");
+
+const blobServiceClient = BlobServiceClient.fromConnectionString(storageAccountConnectionString);
+const containerClient = blobServiceClient.getContainerClient("screen");
 
 
 module.exports = async function (context, req) {
@@ -48,6 +52,14 @@ module.exports = async function (context, req) {
         );
     }
 
-    const emails = entities.map(entity => entity.RowKey); 
+    const emails = entities.map(entity => entity.RowKey);
+
+    //delete cached screens
+    await Promise.all(emails.map(async studentEmail => {
+        const blobName = studentEmail.replace(/[^a-zA-Z0-9 ]/g, '_') + ".jpeg";
+        const blobClient = containerClient.getBlobClient(blobName);
+        await blobClient.deleteIfExists();
+    }));
+
     setJson(context, emails);
 }

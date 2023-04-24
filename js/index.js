@@ -30,6 +30,7 @@ $(document).ready(async () => {
   try {
     const user = await getUser();
     console.log(user);
+    $("#logout").html("Logout " + user.userDetails);
     $(".member").show();
     $(".nonmember").hide();
   }
@@ -293,7 +294,7 @@ $(document).ready(async () => {
     canvas.width = 1920;
     canvas.height = 1080;
     canvas.getContext('2d').drawImage(videoElem, 0, 0);
-    const img = canvas.toDataURL('image/jpeg');    
+    const img = canvas.toDataURL('image/jpeg');
     $.post("/api/screens", img, (result) => {
       console.log(result);
     }).fail((err) => {

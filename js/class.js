@@ -9,6 +9,7 @@ $(document).ready(async () => {
     try {
         const user = await getUser();
         console.log(user);
+        $("#logout").html("Logout " + user.userDetails);
         $(".member").show();
         $(".nonmember").hide();
     }

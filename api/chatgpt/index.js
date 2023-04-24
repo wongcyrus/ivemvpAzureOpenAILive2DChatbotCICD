@@ -16,7 +16,13 @@ module.exports = async function (context, req) {
     const email = getEmail(req);
 
     if (!await isMember(email, context)) {
-        setErrorJson(context, "Unauthorized");
+        setJson(context,{
+            "choices": [
+                {
+                    "text": "You are not a member!",
+                }
+            ]
+        });
         return;
     }
 
