@@ -73,11 +73,11 @@ $(document).ready(async () => {
         }
     });
 
-    $('body').on('click', 'a.studentScreen', ()=> {
+    $('body').on('click', 'a.studentScreen', (evt)=> {
         evt.preventDefault();
-        const sasUrl = $(evt.target).attr("href");
-        console.log(url);
-        $('#modal-body').html(`<img src="${sasUrl}" alt="${email}" class="fluid img-thumbnail"/>`);
+        const sasUrl = $(evt.target).attr("src");
+        console.log(sasUrl);
+        $('#modal-body').html(`<img src="${sasUrl}" alt="${sasUrl}" class="fluid img-thumbnail"/>`);
         $('#screenModal').modal('show');
     });
 });
