@@ -14,17 +14,19 @@ module.exports = async function (context, req) {
     }
 
     const studentEmail = req.query.email;
+    const taskId = req.query.taskId;
     const start = req.query.start;
     const end = req.query.end;
 
+
     let continuationToken = null;
     let pageEntities = undefined;
+    let filter = `PartitionKey eq '${studentEmail}' and RowKey eq '${taskId}' and Timestamp le datetime'${end}' and Timestamp ge datetime'${start}'`;
+
     let entities = [];
     do {
         const page = await chatHistoryTableClient.listEntities({
-            queryOptions: {
-                filter: `PartitionKey eq '${studentEmail}' and Timestamp le datetime'${end}' and Timestamp ge datetime'${start}'`
-            }
+            queryOptions: { filter }
         }).byPage({ maxPageSize: 100, continuationToken: continuationToken }).next();
         pageEntities = page.value;
         continuationToken = pageEntities.continuationToken;
