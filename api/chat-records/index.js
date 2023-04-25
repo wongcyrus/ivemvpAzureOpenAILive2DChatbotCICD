@@ -21,7 +21,8 @@ module.exports = async function (context, req) {
 
     let continuationToken = null;
     let pageEntities = undefined;
-    let filter = `PartitionKey eq '${studentEmail}' and RowKey eq '${taskId}' and Timestamp le datetime'${end}' and Timestamp ge datetime'${start}'`;
+    let filter = `PartitionKey eq '${studentEmail}' and Timestamp le datetime'${end}' and Timestamp ge datetime'${start}'`;
+    filter += taskId ? ` and taskId eq '${taskId}'` : "";
 
     let entities = [];
     do {

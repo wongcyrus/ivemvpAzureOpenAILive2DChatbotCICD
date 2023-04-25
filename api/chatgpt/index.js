@@ -98,7 +98,7 @@ module.exports = async function (context, req) {
             taskId,
             ... {
                 PartitionKey: email,
-                RowKey: taskId,
+                RowKey: ticks,
                 Email: email,
                 User: question,
                 Chatbot: res.data.choices[0].message.content,
