@@ -36,6 +36,7 @@ module.exports = async function (context, req) {
                 }
             ]
         });
+        return;
     }
 
     let body = { ...req.body };
