@@ -115,7 +115,7 @@ $(document).ready(async () => {
             { "role": "user", "content": result }
         ];
         const m = {
-            "model": "gpt-4",
+            "model": $("#model").val(),
             "prompt": messages,
             "max_tokens": 800,
             "temperature": 0.7,

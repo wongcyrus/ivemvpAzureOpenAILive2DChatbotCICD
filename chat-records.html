@@ -40,6 +40,21 @@
                             <input type="datetime-local" id="end" name="end" min="2023-01-01T00:00"
                                 max="2033-01-01T00:00" class="form-control">
                         </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="model">Model:</label>
+                                <select name="model" id="model" class="form-control">
+                                    <option value='text-ada-001'>text-ada-001</option>
+                                    <option value='text-curie-001'>text-curie-001</option>
+                                    <option value='text-davinci-002'>text-davinci-002</option>
+                                    <option value='code-davinci-002'>code-davinci-002</option>
+                                    <option value='text-davinci-003'>text-davinci-003</option>
+                                    <option value='gpt-35-turbo' selected="selected">gpt-35-turbo</option>
+                                    <option value='gpt-4-32k'>gpt-4-32k</option>
+                                    <option value='gpt-4'>gpt-4</option>
+                                </select>
+                            </div>
+                        </div>
                         <div class=" col">
                             <button type="submit" class="btn btn-primary" id="email-submit">Load</button>
                         </div>
@@ -50,13 +65,12 @@
                                 <label for="PromptTextarea">Prompt by <a
                                         href="https://github.com/janl/mustache.js/">mustache.js</a> </label>
                                 <button type="submit" class="btn btn-primary" id="comment-submit">Send</button>
-                                <textarea class="form-control" id="PromptTextarea" rows="3">
+                                <textarea class="form-control" id="PromptTextarea" rows="10">
 Comments the following conversations between User and AI in 100 words:
 {{#conversations}}
-"User: " + {{User}} + "\n";
-"AI: " + {{Chatbot}} + "\n";
+User: {{User}}
+AI: {{Chatbot}}
 {{/conversations}}
-
 Total Cost: {{totalCost}}
 Total Token: {{totalTokens}}
 Give a mark from 1-10 for the effectiveness of those conversations.
@@ -72,7 +86,7 @@ Return JSON in following format:
                             <div class="form-group">
                                 <label for="ResponseTextarea">Response <span class="badge badge-light"
                                         id="mark"></span></label>
-                                <textarea class="form-control" id="ResponseTextarea" rows="3"></textarea>
+                                <textarea class="form-control" id="ResponseTextarea" rows="10"></textarea>
                             </div>
                         </div>
                     </div>
