@@ -74,6 +74,7 @@ $(document).ready(async () => {
             delete other["TotalTokens"];
             delete other["Cost"];
             delete other["timestamp"];
+            const newDate = new Date(timestamp);
             const tr = $(`
             <tr>
                 <th scope="row">${rowCount}</th>
@@ -84,7 +85,7 @@ $(document).ready(async () => {
                 <td>${CompletionTokens}</td>
                 <td>${TotalTokens}</td>
                 <td class=".wrap">USD$ ${Cost}</td>
-                <td>${timestamp}</td>
+                <td>${newDate.toDateString()} ${newDate.toTimeString()}</td>
                 <td class=".wrap">${JSON.stringify(other)}</td>
             </tr>       
             `);
