@@ -204,5 +204,5 @@ body {
 
 .vertical-scrollable>.row {
   overflow-y: scroll;
-  height: 200px;
+  max-height: 350px;
 }

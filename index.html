@@ -33,7 +33,7 @@
           <div class="row">
             <div class="col-12">
               <label for="logout"></label><a class="member" href="/.auth/logout" id="logout">Logout</a></label>
-              <form class="form">
+              <form class="form-inline">
                 <div class="form-group">
                   <label for="taskId">Task ID:</label><input type="text" class="form-control" id="taskId">
                 </div>
@@ -42,8 +42,58 @@
                       target="_blank">Sample</a>):</label>
                   <input type="file" id="configFileInput" class="form-control nonmember">
                 </div>
+
+              </form>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <section class="msger">
+                <header class="msger-header">
+                  <div class="msger-header-title">
+                    <i class="fas fa-comment-alt"></i> Chat <span id="cost"></span>
+                  </div>
+                  <div class="msger-header-options">
+                    <span><i class="fas fa-cog"></i></span>
+                  </div>
+                </header>
+                <main class="msger-chat">
+                </main>
+                <form class="msger-inputarea">
+                  <input type="text" class="msger-input" id="prompt" placeholder="Enter your message...">
+                  <button type="submit" class="msger-send-btn">Send</button>
+                  <button id="recButton" class="recrodingButton"></button>
+                </form>
+              </section>
+            </div>
+          </div>
+        </div>
+        <div class="container vertical-scrollable" style="max-height: 20%;">
+          <div class="row">
+            <div class="col-12">
+              <h5>Options</h5>
+              <audio id="voice"></audio>
+              <form class="form-inline">
                 <div class="form-group">
-                  <label for="language">Language</label>
+                  <label for="awesome-chatgpt-prompts">Act as:</label>
+                  <select name="awesome-chatgpt-prompts" id="awesome-chatgpt-prompts" class="form-control">
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="model">Model:</label>
+                  <select name="model" id="model" class="form-control">
+                    <option value='text-ada-001'>text-ada-001</option>
+                    <option value='text-curie-001'>text-curie-001</option>
+                    <option value='text-davinci-002'>text-davinci-002</option>
+                    <option value='code-davinci-002'>code-davinci-002</option>
+                    <option value='text-davinci-003'>text-davinci-003</option>
+                    <option value='gpt-35-turbo' selected="selected">gpt-35-turbo</option>
+                    <option value='gpt-4-32k'>gpt-4-32k</option>
+                    <option value='gpt-4'>gpt-4</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="language">Voice Language:</label>
                   <select name="language" id="language" class="form-control">
                     <option value='af-ZA'>Afrikaans (South Africa)</option>
                     <option value='am-ET'>Amharic (Ethiopia)</option>
@@ -187,50 +237,6 @@
                     <option value='zu-ZA'>Zulu (South Africa)</option>
                   </select>
                 </div>
-              </form>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-12">
-              <section class="msger">
-                <header class="msger-header">
-                  <div class="msger-header-title">
-                    <i class="fas fa-comment-alt"></i> Chat <span id="cost"></span>
-                  </div>
-                  <div class="msger-header-options">
-                    <span><i class="fas fa-cog"></i></span>
-                  </div>
-                </header>
-                <main class="msger-chat">
-                </main>
-                <form class="msger-inputarea">
-                  <input type="text" class="msger-input" id="prompt" placeholder="Enter your message...">
-                  <button type="submit" class="msger-send-btn">Send</button>
-                  <button id="recButton" class="recrodingButton"></button>
-                </form>
-              </section>
-            </div>
-          </div>
-        </div>
-        <div class="container vertical-scrollable" style="max-height: 20%;">
-          <div class="row">
-            <div class="col-12">
-              <h5>Options</h5>
-              <audio id="voice"></audio>
-              <form class="form-inline">
-                <div class="form-group">
-                  <label for="model">Model:</label>
-                  <select name="model" id="model" class="form-control">
-                    <option value='text-ada-001'>text-ada-001</option>
-                    <option value='text-curie-001'>text-curie-001</option>
-                    <option value='text-davinci-002'>text-davinci-002</option>
-                    <option value='code-davinci-002'>code-davinci-002</option>
-                    <option value='text-davinci-003'>text-davinci-003</option>
-                    <option value='gpt-35-turbo' selected="selected">gpt-35-turbo</option>
-                    <option value='gpt-4-32k'>gpt-4-32k</option>
-                    <option value='gpt-4'>gpt-4</option>
-                  </select>
-                </div>
                 <div class="form-group">
                   <label for="max_tokens">Max response tokens:</label> <output>(800)</output>
                   <input type="range" id="max_tokens" name="max_tokens" min="300" max="3000" value="800" step="10"
@@ -269,11 +275,7 @@
                     oninput="this.previousElementSibling.value = '(' + this.value +')'" class="form-control">
                 </div>
 
-                <div class="form-group">
-                  <label for="awesome-chatgpt-prompts">Act as:</label>
-                  <select name="awesome-chatgpt-prompts" id="awesome-chatgpt-prompts" class="form-control">
-                  </select>
-                </div>
+
 
                 <button type="button" id="share-screen" class="btn btn-primary mb-2">Share Screen</button>
               </form>
