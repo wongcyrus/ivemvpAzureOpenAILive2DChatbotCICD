@@ -39,6 +39,16 @@ $(document).ready(async () => {
     $(".nonmember").show();
   }
 
+  function getUrlVars() {
+    var vars = [], hash;
+    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+    for (var i = 0; i < hashes.length; i++) {
+        hash = hashes[i].split('=');
+        vars.push(hash[0]);
+        vars[hash[0]] = hash[1];
+    }
+    return vars;
+}
   const parameters = getUrlVars();
   if (parameters["taskId"]) {
       $("#taskId").val(parameters["taskId"]);
