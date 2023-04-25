@@ -83,9 +83,9 @@ $(document).ready(async () => {
                 <td>${PromptTokens}</td>
                 <td>${CompletionTokens}</td>
                 <td>${TotalTokens}</td>
-                <td>${Cost}</td>
+                <td class=".wrap">USD$ ${Cost}</td>
                 <td>${timestamp}</td>
-                <td>${JSON.stringify(other)}</td>
+                <td class=".wrap">${JSON.stringify(other)}</td>
             </tr>       
             `);
             tableBody.append(tr);

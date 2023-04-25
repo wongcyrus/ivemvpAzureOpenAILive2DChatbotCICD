@@ -206,3 +206,12 @@ body {
   overflow-y: scroll;
   max-height: 350px;
 }
+
+.chat-history {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.wrap {
+  word-wrap: break-word;
+}
