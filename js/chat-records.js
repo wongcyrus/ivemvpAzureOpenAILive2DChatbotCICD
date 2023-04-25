@@ -52,7 +52,7 @@ $(document).ready(async () => {
         const end = new Date($("#end").val());
         const email = $("#email").val();
         const taskId = $("#taskId").val();
-        const response = await fetch(`/api/chat-records?email=${email}&taskId=${taskId}start=${start.toISOString()}&end=${end.toISOString()}`, {
+        const response = await fetch(`/api/chat-records?email=${email}&taskId=${taskId}&start=${start.toISOString()}&end=${end.toISOString()}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
