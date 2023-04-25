@@ -19,7 +19,7 @@ module.exports = async function (context, req) {
         setJson(context, {
             "choices": [
                 {
-                    "text": "You are not a member!",
+                    "message": { "content": "You are not member!" }
                 }
             ]
         });
@@ -32,7 +32,7 @@ module.exports = async function (context, req) {
         setJson(context, {
             "choices": [
                 {
-                    "text": "Used up your daily limit. Please try again tomorrow.",
+                    "message": { "content": "Used up your daily limit. Please try again tomorrow." }
                 }
             ]
         });
