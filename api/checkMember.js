@@ -35,7 +35,7 @@ const isTeacher = async (email, context) => {
 }
 
 const isOverLimit = (email, tokenUsageCost, limit, context) => {
-    context.log(email + " used " + tokenUsageCost + " tokens today.");
+    context.log(email + " used $" + tokenUsageCost + " today.");
     return tokenUsageCost > limit;
 };
 

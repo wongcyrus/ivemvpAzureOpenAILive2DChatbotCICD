@@ -29,6 +29,10 @@
                             <input type="email" class="form-control" placeholder="Email" id="email" />
                         </div>
                         <div class="col">
+                            <label for="taskId" class="col-form-label">Task ID:</label>
+                            <input type="text" class="form-control" placeholder="taskId" id="taskId" />
+                        </div>
+                        <div class="col">
                             <label for="start" class="col-form-label">Start:</label>
                             <input type="datetime-local" id="start" name="start" min="2023-01-01T00:00"
                                 max="2033-01-01T00:00" class="form-control">
@@ -83,6 +87,7 @@ Return JSON in following format:
                         <th scope="col">Total Tokens</th>
                         <th scope="col">Cost</th>
                         <th scope="col">Time</th>
+                        <th scope="col">Other</th>
                     </tr>
                 </thead>
                 <tbody id="table-body">

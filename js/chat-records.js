@@ -34,6 +34,9 @@ $(document).ready(async () => {
     if (parameters["email"]) {
         $("#email").val(parameters["email"]);
     }
+    if (parameters["taskId"]) {
+        $("#taskId").val(parameters["taskId"]);
+    }
     if (parameters["start"]) {
         $("#start").val(parameters["start"]);
     }
@@ -48,7 +51,8 @@ $(document).ready(async () => {
         const start = new Date($("#start").val());
         const end = new Date($("#end").val());
         const email = $("#email").val();
-        const response = await fetch(`/api/chat-records?email=${email}&start=${start.toISOString()}&end=${end.toISOString()}`, {
+        const taskId = $("#taskId").val();
+        const response = await fetch(`/api/chat-records?email=${email}&taskId=${taskId}start=${start.toISOString()}&end=${end.toISOString()}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -61,6 +65,15 @@ $(document).ready(async () => {
         tableBody.empty();
         data.forEach(chat => {
             const { User, Chatbot, Model, CompletionTokens, PromptTokens, TotalTokens, Cost, timestamp } = chat;
+            let other = { ...chat };
+            delete other["User"];
+            delete other["Chatbot"];
+            delete other["Model"];
+            delete other["CompletionTokens"];
+            delete other["PromptTokens"];
+            delete other["TotalTokens"];
+            delete other["Cost"];
+            delete other["timestamp"];
             const tr = $(`
             <tr>
                 <th scope="row">${rowCount}</th>
@@ -72,6 +85,7 @@ $(document).ready(async () => {
                 <td>${TotalTokens}</td>
                 <td>${Cost}</td>
                 <td>${timestamp}</td>
+                <td>${JSON.stringify(other)}</td>
             </tr>       
             `);
             tableBody.append(tr);
