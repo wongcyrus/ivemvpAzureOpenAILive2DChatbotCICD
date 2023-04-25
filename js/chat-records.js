@@ -64,10 +64,11 @@ $(document).ready(async () => {
         let rowCount = 1;
         tableBody.empty();
         data.forEach(chat => {
-            const { User, Chatbot, Model, CompletionTokens, PromptTokens, TotalTokens, Cost, timestamp } = chat;
+            const { User, Chatbot, taskId, Model, CompletionTokens, PromptTokens, TotalTokens, Cost, timestamp } = chat;
             let other = { ...chat };
             delete other["User"];
             delete other["Chatbot"];
+            delete other["taskId"];
             delete other["Model"];
             delete other["CompletionTokens"];
             delete other["PromptTokens"];
@@ -80,13 +81,14 @@ $(document).ready(async () => {
                 <th scope="row">${rowCount}</th>
                 <td>${User}</td>
                 <td>${Chatbot}</td>
+                <td>${taskId}</td>
                 <td>${Model}</td>
                 <td>${PromptTokens}</td>
                 <td>${CompletionTokens}</td>
                 <td>${TotalTokens}</td>
                 <td class=".wrap">USD$ ${Cost}</td>
                 <td>${newDate.toDateString()} ${newDate.toTimeString()}</td>
-                <td class=".wrap">${JSON.stringify(other)}</td>
+                <td class=".wrap">${JSON.stringify(other, null, 2)}</td>
             </tr>       
             `);
             tableBody.append(tr);
