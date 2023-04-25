@@ -99,7 +99,16 @@ $(document).ready(async () => {
     $("#comment-submit").on("click", async (evt) => {
         evt.preventDefault();
         const template = $("#PromptTextarea").val();
-        var result = Mustache.render(template, {"conversations":currentChatRecord});
+
+        const costAndTokens = currentChatRecord.reduce((acc, chat) => {
+            acc.totalCost += chat.Cost;
+            acc.totalTokens += chat.TotalTokens;
+            acc.completionTokens += chat.CompletionTokens;
+            acc.promptTokens += chat.PromptTokens;
+            return acc;
+        }, { totalCost: 0, totalTokens: 0, completionTokens: 0, promptTokens: 0 });
+        const result = Mustache.render(template, { "conversations": currentChatRecord, ...costAndTokens });
+        $("#ResponseTextarea").html(result);
 
         const systemMessage = { "role": "system", "content": "You are a helpful assistant." };
         const messages = [systemMessage,
