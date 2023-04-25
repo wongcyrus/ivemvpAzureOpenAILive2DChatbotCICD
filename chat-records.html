@@ -47,11 +47,17 @@
                     <div class="form-row">
                         <div class="col">
                             <div class="form-group">
-                                <label for="PromptTextarea">Prompt: ###conversations###</label>
+                                <label for="PromptTextarea">Prompt:</label>
                                 <button type="submit" class="btn btn-primary" id="comment-submit">Send</button>
                                 <textarea class="form-control" id="PromptTextarea" rows="3">
 Comments the following conversations between User and AI in 100 words:
 ###conversations###
+
+{{#conversations}}
+"User: " + User + "\n";
+"AI: " + Chatbot + "\n";
+{{/conversations}}
+
 Give a mark from 1-10 for the effectiveness of those conversations.
 Return JSON in following format:
 {
@@ -63,7 +69,8 @@ Return JSON in following format:
                         </div>
                         <div class="col">
                             <div class="form-group">
-                                <label for="ResponseTextarea">Response <span class="badge badge-light" id="mark"></span></label>
+                                <label for="ResponseTextarea">Response <span class="badge badge-light"
+                                        id="mark"></span></label>
                                 <textarea class="form-control" id="ResponseTextarea" rows="3"></textarea>
                             </div>
                         </div>
@@ -105,6 +112,7 @@ Return JSON in following format:
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
     <script src="https://blueimp.github.io/Gallery/js/jquery.blueimp-gallery.min.js" crossorigin="anonymous"></script>
+    <script src="https://raw.github.com/janl/mustache.js/master/mustache.js"></script>
     <!--  Logic     -->
     <script src="./js/chat-records.js"></script>
 </body>

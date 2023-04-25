@@ -98,16 +98,12 @@ $(document).ready(async () => {
 
     $("#comment-submit").on("click", async (evt) => {
         evt.preventDefault();
-        const prompt = $("#PromptTextarea").val();
-        const convertsions = currentChatRecord.reduce((acc, chat) => {
-            acc += "User: " + chat.User + "\n";
-            acc += "AI: " + chat.Chatbot + "\n";
-            return acc;
-        }, "");
-        const text = prompt.replace("###conversations###", convertsions);
+        const template = $("#PromptTextarea").val();
+        var result = Mustache.render(template, {"conversations":currentChatRecord});
+
         const systemMessage = { "role": "system", "content": "You are a helpful assistant." };
         const messages = [systemMessage,
-            { "role": "user", "content": text }
+            { "role": "user", "content": result }
         ];
         const m = {
             "model": "gpt-4",
