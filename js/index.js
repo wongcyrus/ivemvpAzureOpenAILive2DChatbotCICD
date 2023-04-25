@@ -39,6 +39,11 @@ $(document).ready(async () => {
     $(".nonmember").show();
   }
 
+  const parameters = getUrlVars();
+  if (parameters["taskId"]) {
+      $("#taskId").val(parameters["taskId"]);
+  }
+
   const md = markdownit({
     highlight: function (str, lang) { // markdown高亮
       try {
