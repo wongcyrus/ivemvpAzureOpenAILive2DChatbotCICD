@@ -62,9 +62,10 @@ body {
   flex-flow: column wrap;
   justify-content: space-between;
   width: 100%;
-  max-width: 100%; 
+  max-width: 100%;
   height: 500px;
   /* min-height: 500px; */
+  margin-bottom: 15px;
   border: var(--border);
   border-radius: 5px;
   background: var(--msger-bg);
@@ -201,7 +202,7 @@ body {
 
 
 
-.vertical-scrollable>.row { 
+.vertical-scrollable>.row {
   overflow-y: scroll;
-  height: 200px; 
+  height: 200px;
 }
