@@ -108,6 +108,8 @@ module.exports = async function (context, req) {
                 Cost: cost
             }, ...body
         };
+        delete body['messages'];
+        delete body['prompt'];
 
         context.log(chatEntity);
         await chatHistoryTableClient.createEntity(chatEntity);
