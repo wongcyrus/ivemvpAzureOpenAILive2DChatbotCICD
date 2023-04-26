@@ -17,7 +17,7 @@ module.exports = async function (context, req) {
     const markEntity = {
         ... {
             PartitionKey: teacherEmail,
-            RowKey: body.assignmentId + body.studentEmail,
+            RowKey: body.assignmentId + "-" + body.studentEmail,
         }, ...body
     };
     delete markEntity['messages'];
@@ -25,5 +25,5 @@ module.exports = async function (context, req) {
 
     context.log(markEntity);
     await marksTableClient.createEntity(markEntity);
-    setJson(context, entities);
+    setJson(context, markEntity);
 }

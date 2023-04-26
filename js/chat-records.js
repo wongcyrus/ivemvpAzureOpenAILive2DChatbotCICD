@@ -41,6 +41,7 @@ $(document).ready(async () => {
         }
     }
 
+    const noChatrecord = $("#no-chat-record");
     const tableBody = $("#table-body");
     async function loadStudentChatRecords() {
         const start = new Date($("#start").val());
@@ -56,6 +57,13 @@ $(document).ready(async () => {
         const data = await response.json();
         console.log(data);
         currentChatRecord = data;
+
+        if(data.length === 0) {
+            noChatrecord.show();
+        } else {
+            noChatrecord.hide();
+        }
+        
         let rowCount = 1;
         tableBody.empty();
         data.forEach(chat => {
@@ -85,6 +93,7 @@ $(document).ready(async () => {
             tableBody.append(tr);
             rowCount++;
         });
+        return data;
     }
 
 
@@ -132,6 +141,7 @@ $(document).ready(async () => {
         if (marked.comments) {
             $("#mark").val(marked.marks);
             $("#ResponseTextarea").html(marked.comments);
+            return marked;
         } else {
             $("#ResponseTextarea").html(answer);
         }
