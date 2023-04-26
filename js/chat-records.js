@@ -151,7 +151,6 @@ $(document).ready(async () => {
         const studentEmail = $("#email").val();
         const start = new Date($("#start").val());
         const end = new Date($("#end").val());
-
         const taskId = $("#taskId").val();
         const mark = $("#mark").val();
         const comments = $("#ResponseTextarea").val();
@@ -223,9 +222,22 @@ $(document).ready(async () => {
             if (chat.length > 0) {
                 await gradeCurrentStudent();
                 await saveMark(assignmentId);
-            }           
+            }
         }
+    });
 
+    $("#mark-report-submit").on("click", async (evt) => {
+        evt.preventDefault();
+        const assignmentId = $("#assignmentId").val();
+        const taskId = $("#taskId").val();
+        const response = await fetch(`/api/assignment-report`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ assignmentId, taskId })
+        });
+        console.log(response);
     });
 });
 
