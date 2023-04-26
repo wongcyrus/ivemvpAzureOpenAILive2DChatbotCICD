@@ -230,30 +230,25 @@ $(document).ready(async () => {
         evt.preventDefault();
         const assignmentId = $("#assignmentId").val();
         const taskId = $("#taskId").val();
-        const response = await fetch(`/api/assignment-report`, {
-            method: "POST",
-            dataType: "blob",
-            headers: {
-                "Content-Type": "application/json",
+        $.ajax({
+            url: '/api/assignment-report',
+            method: 'POST',
+            xhrFields: {
+                responseType: 'blob'
             },
-            body: JSON.stringify({ assignmentId, taskId })
+            data: JSON.stringify({ assignmentId, taskId }),
+            success: (data) => {
+                const fileName = "markreport-" + assignmentId + "-" + taskId + ".xlsx"
+                var a = document.createElement('a');
+                var url = window.URL.createObjectURL(data);
+                a.href = url;
+                a.download = fileName;
+                document.body.append(a);
+                a.click();
+                a.remove();
+                window.URL.revokeObjectURL(url);
+            }
         });
-
-        console.log(response);
-        const blob = new Blob([data], { type: 'data:application/vnd.ms-excel' });
-        let isIE = false || !!document.documentMode;
-        if (isIE) {
-            window.navigator.msSaveBlob(blob, fileName);
-        } else {
-            let url = window.URL || window.webkitURL;
-            link = url.createObjectURL(blob);
-            let a = $("<a />");
-            a.attr("download", fileName);
-            a.attr("href", link);
-            $("body").append(a);
-            a[0].click();
-            $("body").remove(a);
-        }
     });
 });
 
