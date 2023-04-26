@@ -16,8 +16,8 @@ module.exports = async function (context, req) {
 
     const markEntity = {
         ... {
-            PartitionKey: body.email,
-            RowKey: body.assignmentId,
+            PartitionKey: teacherEmail,
+            RowKey: body.assignmentId + body.studentEmail,
         }, ...body
     };
     delete markEntity['messages'];

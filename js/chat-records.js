@@ -1,6 +1,7 @@
 let students;
 let currentChatRecord;
 let mark;
+let teacherEmail;
 $(document).ready(async () => {
     async function getUser() {
         const response = await fetch('/.auth/me');
@@ -12,6 +13,7 @@ $(document).ready(async () => {
     try {
         const user = await getUser();
         console.log(user);
+        teacherEmail = user.userDetails;
         $("#logout").html("Logout (" + user.userDetails + ")");
         $(".member").show();
         $(".nonmember").hide();
@@ -172,7 +174,7 @@ $(document).ready(async () => {
             alert("Please give an assignment ID");
             return;
         }
-        const email = $("#email").val();
+        const studentEmail = $("#email").val();
         const start = new Date($("#start").val());
         const end = new Date($("#end").val());
 
@@ -184,7 +186,7 @@ $(document).ready(async () => {
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ email, assignmentId, taskId, start, end, mark, comments })
+            body: JSON.stringify({ studentEmail, assignmentId, taskId, start, end, mark, comments })
         });
         const data = await response.json();
         console.log(data);
