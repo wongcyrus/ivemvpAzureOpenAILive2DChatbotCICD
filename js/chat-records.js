@@ -167,7 +167,7 @@ $(document).ready(async () => {
         });
     });
 
-    $("saveMark").on("click", async (evt) => {
+    $("#saveMark").on("click", async (evt) => {
         evt.preventDefault();
         const assignmentId = $("#assignmentId").val();
         if (!assignmentId) {
