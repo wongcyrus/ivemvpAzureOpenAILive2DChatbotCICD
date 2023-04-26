@@ -214,15 +214,18 @@ $(document).ready(async () => {
             return;
         }
         const response = confirm("Are you sure grade the whole class?");
-        if (!response) {
-            for (let student of students) {
-                console.log(student);
-                $("#email").val(student.email);
-                await loadStudentChatRecords();
-                // await gradeCurrentStudent()
-                // await saveMark(assignmentId);
-            }
+        if (!response) return;
+
+        for (let student of students) {
+            console.log(student);
+            $("#email").val(student.email);
+            const chat = await loadStudentChatRecords();
+            if (chat.length > 0) {
+                await gradeCurrentStudent();
+                await saveMark(assignmentId);
+            }           
         }
+
     });
 });
 
