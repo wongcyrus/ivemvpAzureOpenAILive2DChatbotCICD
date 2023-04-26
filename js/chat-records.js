@@ -11,7 +11,7 @@ $(document).ready(async () => {
     try {
         const user = await getUser();
         console.log(user);
-        $("#logout").html("Logout " + user.userDetails);
+        $("#logout").html("Logout (" + user.userDetails + ")");
         $(".member").show();
         $(".nonmember").hide();
     }
@@ -21,9 +21,9 @@ $(document).ready(async () => {
     }
 
     function getUrlVars() {
-        var vars = [], hash;
-        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-        for (var i = 0; i < hashes.length; i++) {
+        let vars = [], hash;
+        let hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+        for (let i = 0; i < hashes.length; i++) {
             hash = hashes[i].split('=');
             vars.push(hash[0]);
             vars[hash[0]] = hash[1];
@@ -31,19 +31,12 @@ $(document).ready(async () => {
         return vars;
     }
     const parameters = getUrlVars();
-    if (parameters["email"]) {
-        $("#email").val(parameters["email"]);
+    const inputFields = ["email", "taskId", "start", "end"];
+    for (let field of inputFields) {
+        if (parameters[field]) {
+            $(`#${field}`).val(parameters[field]);
+        }
     }
-    if (parameters["taskId"]) {
-        $("#taskId").val(parameters["taskId"]);
-    }
-    if (parameters["start"]) {
-        $("#start").val(parameters["start"]);
-    }
-    if (parameters["end"]) {
-        $("#end").val(parameters["end"]);
-    }
-
 
     const tableBody = $("#table-body");
     $("#email-submit").on("click", async (evt) => {
@@ -66,15 +59,11 @@ $(document).ready(async () => {
         data.forEach(chat => {
             const { User, Chatbot, taskId, Model, CompletionTokens, PromptTokens, TotalTokens, Cost, timestamp } = chat;
             let other = { ...chat };
-            delete other["User"];
-            delete other["Chatbot"];
-            delete other["taskId"];
-            delete other["Model"];
-            delete other["CompletionTokens"];
-            delete other["PromptTokens"];
-            delete other["TotalTokens"];
-            delete other["Cost"];
-            delete other["timestamp"];
+            const fieldsToDelete = ["User", "Chatbot", "taskId", "Model", "CompletionTokens", "PromptTokens", "TotalTokens", "Cost", "timestamp"];
+            for (let field of fieldsToDelete) {
+                delete other[field];
+            }
+
             const newDate = new Date(timestamp);
             const tr = $(`
             <tr>

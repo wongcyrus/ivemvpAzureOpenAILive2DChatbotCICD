@@ -30,7 +30,7 @@ $(document).ready(async () => {
   try {
     const user = await getUser();
     console.log(user);
-    $("#logout").html("Logout " + user.userDetails);
+    $("#logout").html("Logout (" + user.userDetails + ")");
     $(".member").show();
     $(".nonmember").hide();
   }
@@ -40,18 +40,18 @@ $(document).ready(async () => {
   }
 
   function getUrlVars() {
-    var vars = [], hash;
-    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-    for (var i = 0; i < hashes.length; i++) {
-        hash = hashes[i].split('=');
-        vars.push(hash[0]);
-        vars[hash[0]] = hash[1];
+    let vars = [], hash;
+    let hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+    for (let i = 0; i < hashes.length; i++) {
+      hash = hashes[i].split('=');
+      vars.push(hash[0]);
+      vars[hash[0]] = hash[1];
     }
     return vars;
-}
+  }
   const parameters = getUrlVars();
   if (parameters["taskId"]) {
-      $("#taskId").val(parameters["taskId"]);
+    $("#taskId").val(parameters["taskId"]);
   }
 
   const md = markdownit({
