@@ -34,7 +34,9 @@ module.exports = async function (context, req) {
                 {
                     "message": { "content": "Used up your daily limit. Please try again tomorrow." }
                 }
-            ]
+            ],
+            "cost": 0,
+            "left": 0
         });
         return;
     }
