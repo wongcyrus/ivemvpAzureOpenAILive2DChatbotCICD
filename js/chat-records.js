@@ -58,12 +58,12 @@ $(document).ready(async () => {
         console.log(data);
         currentChatRecord = data;
 
-        if(data.length === 0) {
+        if (data.length === 0) {
             noChatrecord.show();
         } else {
             noChatrecord.hide();
         }
-        
+
         let rowCount = 1;
         tableBody.empty();
         data.forEach(chat => {
@@ -147,10 +147,29 @@ $(document).ready(async () => {
         }
     }
 
+    async function saveMark(assignmentId) {
+        const studentEmail = $("#email").val();
+        const start = new Date($("#start").val());
+        const end = new Date($("#end").val());
+
+        const taskId = $("#taskId").val();
+        const mark = $("#mark").val();
+        const comments = $("#ResponseTextarea").val();
+        const response = await fetch(`/api/save-mark`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ studentEmail, assignmentId, taskId, start, end, mark, comments })
+        });
+        const data = await response.json();
+        console.log(data);
+    }
+
 
     $("#email-submit").on("click", async (evt) => {
         evt.preventDefault();
-        await loadStudentChatRecords(tableBody);
+        await loadStudentChatRecords();
     });
 
     $("#comment-submit").on("click", async (evt) => {
@@ -184,23 +203,28 @@ $(document).ready(async () => {
             alert("Please give an assignment ID");
             return;
         }
-        const studentEmail = $("#email").val();
-        const start = new Date($("#start").val());
-        const end = new Date($("#end").val());
+        await saveMark(assignmentId);
+    });
 
-        const taskId = $("#taskId").val();
-        const mark = $("#mark").val();
-        const comments = $("#ResponseTextarea").val();
-        const response = await fetch(`/api/save-mark`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ studentEmail, assignmentId, taskId, start, end, mark, comments })
-        });
-        const data = await response.json();
-        console.log(data);
+    $("#grade-class-submit").on("click", async (evt) => {
+        evt.preventDefault();
+        const assignmentId = $("#assignmentId").val();
+        if (!assignmentId) {
+            alert("Please give an assignment ID");
+            return;
+        }
+        const response = confirm("Are you sure grade the whole class?");
+        if (!response) {
+            for (let student of students) {
+                console.log(student);
+                $("#email").val(student.email);
+                await loadStudentChatRecords();
+                // await gradeCurrentStudent()
+                // await saveMark(assignmentId);
+            }
+        }
     });
 });
+
 
 
