@@ -9,7 +9,7 @@ const classesTableClient = TableClient.fromConnectionString(chatStorageAccountCo
 
 module.exports = async function (context, req) {
 
-    context.log(req.headers);
+    context.log("ip:" + request.getHeader('header-name'));
     const teacherEmail = getEmail(req);
 
     if (!await isTeacher(teacherEmail, context)) {
