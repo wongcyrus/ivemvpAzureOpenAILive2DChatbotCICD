@@ -40,8 +40,7 @@ $(document).ready(async () => {
     }
 
     const tableBody = $("#table-body");
-    $("#email-submit").on("click", async (evt) => {
-        evt.preventDefault();
+    async function loadStudentChatRecords() {
         const start = new Date($("#start").val());
         const end = new Date($("#end").val());
         const email = $("#email").val();
@@ -67,29 +66,28 @@ $(document).ready(async () => {
 
             const newDate = new Date(timestamp);
             const tr = $(`
-            <tr>
-                <th scope="row">${rowCount}</th>
-                <td>${User}</td>
-                <td>${Chatbot}</td>
-                <td>${taskId}</td>
-                <td>${Model}</td>
-                <td>${PromptTokens}</td>
-                <td>${CompletionTokens}</td>
-                <td>${TotalTokens}</td>
-                <td class=".wrap">USD$ ${Cost}</td>
-                <td>${newDate.toDateString()} ${newDate.toTimeString()}</td>
-                <td class=".wrap">${JSON.stringify(other, null, 2)}</td>
-            </tr>       
-            `);
+                <tr>
+                    <th scope="row">${rowCount}</th>
+                    <td>${User}</td>
+                    <td>${Chatbot}</td>
+                    <td>${taskId}</td>
+                    <td>${Model}</td>
+                    <td>${PromptTokens}</td>
+                    <td>${CompletionTokens}</td>
+                    <td>${TotalTokens}</td>
+                    <td class=".wrap">USD$ ${Cost}</td>
+                    <td>${newDate.toDateString()} ${newDate.toTimeString()}</td>
+                    <td class=".wrap">${JSON.stringify(other, null, 2)}</td>
+                </tr>       
+                `);
             tableBody.append(tr);
             rowCount++;
         });
-    });
+    }
 
-    $("#comment-submit").on("click", async (evt) => {
-        evt.preventDefault();
+
+    async function gradeCurrentStudent() {
         const template = $("#PromptTextarea").val();
-
         const costAndTokens = currentChatRecord.reduce((acc, chat) => {
             acc.totalCost += chat.Cost;
             acc.totalTokens += chat.TotalTokens;
@@ -130,11 +128,22 @@ $(document).ready(async () => {
 
         const marked = JSON.parse(answer);
         if (marked.comments) {
-            $("#mark").html(marked.marks + " marks");
+            $("#mark").val(marked.marks);
             $("#ResponseTextarea").html(marked.comments);
         } else {
             $("#ResponseTextarea").html(answer);
         }
+    }
+
+
+    $("#email-submit").on("click", async (evt) => {
+        evt.preventDefault();
+        await loadStudentChatRecords(tableBody);
+    });
+
+    $("#comment-submit").on("click", async (evt) => {
+        evt.preventDefault();
+        await gradeCurrentStudent();
     });
 
     $("#studentClass").on("change", async (evt) => {
@@ -148,7 +157,6 @@ $(document).ready(async () => {
         const data = await response.json();
         const studentSelect = $("#email");
         studentSelect.empty();
-
         students = data;
         data.forEach(student => {
             const { email, name } = student;
@@ -156,4 +164,33 @@ $(document).ready(async () => {
             studentSelect.append(option);
         });
     });
+
+    $("saveMark").on("click", async (evt) => {
+        evt.preventDefault();
+        const assignmentId = $("#assignmentId").val();
+        if (!assignmentId) {
+            alert("Please give an assignment ID");
+            return;
+        }
+        const email = $("#email").val();
+        const start = new Date($("#start").val());
+        const end = new Date($("#end").val());
+
+        const taskId = $("#taskId").val();
+        const mark = $("#mark").val();
+        const comments = $("#ResponseTextarea").val();
+        const response = await fetch(`/api/save-mark`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email, assignmentId, taskId, start, end, mark, comments })
+        });
+        const data = await response.json();
+        console.log(data);
+    }
+
+
 });
+
+
