@@ -17,8 +17,8 @@ module.exports = async function (context, req) {
     }
 
 
-    const taskId = req.taskId;
-    const assignmentId = req.assignmentId;
+    const taskId = req.body.taskId;
+    const assignmentId = req.body.assignmentId;
 
     let continuationToken = null;
     let pageEntities = undefined;
