@@ -24,19 +24,21 @@
                     <div class="form-row">
                         <div class="col">
                             <label for="studentClass" class="col-form-label">Class:</label>
-                            <input type="text" class="form-control" placeholder="studentClass" id="studentClass" />
+                            <input type="text" class="form-control" placeholder="studentClass" id="studentClass"
+                                name="studentClass" />
                         </div>
                         <div class="col">
                             <label for="email" class="col-form-label">Students:</label>
-                            <select name="model" id="email" class="form-control"></select>
+                            <select name="email" id="email" class="form-control"></select>
                         </div>
                         <div class="col">
                             <label for="assignmentId" class="col-form-label">Assignment ID:</label>
-                            <input type="text" class="form-control" placeholder="Assignment Id" id="assignmentId" />
+                            <input type="text" class="form-control" placeholder="Assignment Id" id="assignmentId"
+                                name="assignmentId" />
                         </div>
                         <div class="col">
                             <label for="taskId" class="col-form-label">Task ID:</label>
-                            <input type="text" class="form-control" placeholder="taskId" id="taskId" />
+                            <input type="text" class="form-control" placeholder="taskId" id="taskId" name="taskId" />
                         </div>
                         <div class="col">
                             <label for="start" class="col-form-label">Start:</label>
@@ -95,7 +97,8 @@ Response with JSON in the following format:
                                                                                                                                       
                                 </textarea>
                                 <button type="submit" class="btn btn-primary" id="comment-submit">Grade with AI</button>
-                                <div class="alert alert-primary" role="alert" id="no-chat-record" style="display: none;">
+                                <div class="alert alert-primary" role="alert" id="no-chat-record"
+                                    style="display: none;">
                                     No chat record found.
                                 </div>
                             </div>
