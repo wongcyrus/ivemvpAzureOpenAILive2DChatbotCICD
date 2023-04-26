@@ -10,7 +10,6 @@ const classesTableClient = TableClient.fromConnectionString(chatStorageAccountCo
 module.exports = async function (context, req) {
 
     context.log(req.headers);
-    context.log(req.header('x-forwarded-for'));
     const teacherEmail = getEmail(req);
 
     if (!await isTeacher(teacherEmail, context)) {

@@ -1,3 +1,4 @@
+let students;
 let currentChatRecord;
 let mark;
 $(document).ready(async () => {
@@ -135,4 +136,24 @@ $(document).ready(async () => {
             $("#ResponseTextarea").html(answer);
         }
     });
+
+    $("#studentClass").on("change", async (evt) => {
+        const classId = $("#studentClass").val();
+        const response = await fetch(`/api/get-class-emails?classId=${classId}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        });
+        const data = await response.json();
+        const studentSelect = $("#email");
+        studentSelect.empty();
+
+        students = data;
+        data.forEach(student => {
+            const { email, name } = student;
+            const option = $(`<option value="${email}">${email} ${name}</option>`);
+            studentSelect.append(option);
+        });
+    }
 });
