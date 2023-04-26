@@ -1,19 +1,16 @@
 const { TableClient } = require("@azure/data-tables");
-const { BlobServiceClient, BlobSASPermissions, SASProtocol } = require("@azure/storage-blob");
 const { getEmail, isTeacher } = require("../checkMember");
 const { setJson, setErrorJson } = require("../contextHelper");
 
 
 const chatStorageAccountConnectionString = process.env.chatStorageAccountConnectionString;
-
-const blobServiceClient = BlobServiceClient.fromConnectionString(chatStorageAccountConnectionString);
-const containerClient = blobServiceClient.getContainerClient("screen");
 const classesTableClient = TableClient.fromConnectionString(chatStorageAccountConnectionString, "classes");
 
 
 module.exports = async function (context, req) {
 
-    context.log(req["header"]);
+    context.log(req.headers);
+    context.log(req.header('x-forwarded-for'));
     const teacherEmail = getEmail(req);
 
     if (!await isTeacher(teacherEmail, context)) {
