@@ -155,5 +155,5 @@ $(document).ready(async () => {
             const option = $(`<option value="${email}">${email} ${name}</option>`);
             studentSelect.append(option);
         });
-    }
+    });
 });
