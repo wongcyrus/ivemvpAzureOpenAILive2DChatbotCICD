@@ -51,10 +51,10 @@ $(document).ready(async () => {
             <div class="col-sm-6 col-md-3 mb-3">
                 <div class="thumbnail">                 
                     <a href="${sasUrl}" target="_blank" rel="noopener noreferrer" class="studentScreen">
-                        img src="${sasUrl}" alt="${name} ${email}" class="fluid img-thumbnail"/>
+                        <img src="${sasUrl}" alt="${name} ${email}" class="fluid img-thumbnail"/>
                     <a/>
                     <div class="caption">
-                        <p>${name}</p>
+                        <p>${name} ${email}</p>
                   </div>
                 </div>                
             </div>`);
